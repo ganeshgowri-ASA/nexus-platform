@@ -1,0 +1,37 @@
+# NEXUS Platform Requirements
+# Video Conferencing Module Dependencies
+
+# Core dependencies
+streamlit>=1.28.0
+python-dateutil>=2.8.2
+
+# WebRTC support (simulated in this implementation)
+# In production, would use: aiortc>=1.5.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Type checking
+mypy>=1.5.0
+
+# Async support
+asyncio>=3.4.3
+
+# Optional: AI/ML for transcription (in production)
+# anthropic>=0.3.0  # For Claude API
+# openai>=1.0.0  # Alternative AI API
+# whisper>=1.0.0  # For speech-to-text
+
+# Optional: Cloud storage (in production)
+# boto3>=1.28.0  # AWS S3
+# google-cloud-storage>=2.10.0  # Google Cloud Storage
+# azure-storage-blob>=12.18.0  # Azure Blob Storage
+
+# Optional: Video processing (in production)
+# opencv-python>=4.8.0
+# ffmpeg-python>=0.2.0
+
+# Optional: Media streaming (in production)
+# websockets>=11.0.3
+# aiohttp>=3.8.5
