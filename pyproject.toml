@@ -1,0 +1,189 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nexus-platform"
+version = "0.1.0"
+description = "NEXUS - Unified AI-Powered Productivity Platform with 24 Integrated Modules"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "NEXUS Team", email = "team@nexus-platform.com"}
+]
+keywords = ["ai", "productivity", "translation", "document-processing", "streamlit"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    # Core Framework
+    "streamlit>=1.28.0",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "websockets>=12.0",
+
+    # AI & LLM
+    "anthropic>=0.7.0",
+    "openai>=1.3.0",
+
+    # Database
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.12.0",
+    "psycopg2-binary>=2.9.9",
+    "asyncpg>=0.29.0",
+
+    # Caching & Queue
+    "redis>=5.0.0",
+    "celery>=5.3.4",
+    "flower>=2.0.1",
+
+    # Translation Engines
+    "googletrans==4.0.0rc1",
+    "deepl>=1.16.0",
+    "azure-ai-translation-text>=1.0.0",
+    "boto3>=1.29.0",
+
+    # Language Detection
+    "langdetect>=1.0.9",
+    "langid>=1.1.6",
+    "pycld2>=0.41",
+
+    # Document Processing
+    "PyPDF2>=3.0.0",
+    "pypdf>=3.17.0",
+    "python-docx>=1.1.0",
+    "openpyxl>=3.1.0",
+    "python-pptx>=0.6.23",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=4.9.0",
+    "markdown>=3.5.0",
+
+    # File Storage
+    "minio>=7.2.0",
+    "google-cloud-storage>=2.13.0",
+    "azure-storage-blob>=12.19.0",
+
+    # Validation & Configuration
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "python-dotenv>=1.0.0",
+    "python-multipart>=0.0.6",
+
+    # Security & Auth
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "cryptography>=41.0.0",
+
+    # HTTP & API
+    "httpx>=0.25.0",
+    "requests>=2.31.0",
+    "aiohttp>=3.9.0",
+
+    # Translation Memory & Formats
+    "translate-toolkit>=3.11.0",
+    "polib>=1.2.0",
+
+    # Monitoring & Logging
+    "prometheus-client>=0.19.0",
+    "sentry-sdk>=1.38.0",
+    "structlog>=23.2.0",
+
+    # Utils
+    "python-dateutil>=2.8.2",
+    "pytz>=2023.3",
+    "tenacity>=8.2.3",
+    "tqdm>=4.66.0",
+    "click>=8.1.7",
+
+    # Data Processing
+    "pandas>=2.1.0",
+    "numpy>=1.26.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-xdist>=3.5.0",
+    "black>=23.11.0",
+    "isort>=5.12.0",
+    "flake8>=6.1.0",
+    "mypy>=1.7.0",
+    "pylint>=3.0.0",
+    "pre-commit>=3.5.0",
+]
+
+[project.scripts]
+nexus = "nexus.cli:main"
+nexus-server = "nexus.server:run"
+
+[tool.setuptools]
+packages = ["nexus", "config"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --cov=nexus --cov-report=html --cov-report=term-missing"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["nexus"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
