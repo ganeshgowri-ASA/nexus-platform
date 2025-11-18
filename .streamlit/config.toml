@@ -1,0 +1,64 @@
+# NEXUS Platform Streamlit Configuration
+
+[server]
+# Server settings
+port = 8501
+address = "0.0.0.0"
+headless = true
+runOnSave = true
+enableCORS = false
+enableXsrfProtection = true
+maxUploadSize = 200
+
+[browser]
+# Browser settings
+gatherUsageStats = false
+serverAddress = "localhost"
+serverPort = 8501
+
+[client]
+# Client settings
+showErrorDetails = true
+toolbarMode = "minimal"
+
+[theme]
+# Custom theme matching NEXUS brand
+primaryColor = "#6366f1"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f8f9fa"
+textColor = "#1f2937"
+font = "sans serif"
+
+# Base theme (can be "light" or "dark")
+base = "light"
+
+[runner]
+# Script runner settings
+magicEnabled = true
+installTracer = false
+fixMatplotlib = true
+postScriptGC = true
+fastReruns = true
+
+[logger]
+# Logging settings
+level = "info"
+messageFormat = "%(asctime)s %(levelname)s: %(message)s"
+
+[deprecation]
+# Deprecation warnings
+showPyplotGlobalUse = false
+
+[mapbox]
+# Mapbox token (if using map features)
+# token = "your-mapbox-token-here"
+
+[global]
+# Global settings
+developmentMode = false
+dataFrameSerialization = "legacy"
+showWarningOnDirectExecution = true
+
+# Performance settings
+maxCachedMessageAge = 2.0
+minCachedMessageSize = 100000

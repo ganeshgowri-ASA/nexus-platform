@@ -1,0 +1,87 @@
+# NEXUS Platform Dependencies
+# Python 3.9+
+
+# Core Framework
+streamlit>=1.31.0
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# AI & ML
+anthropic>=0.18.0
+
+# Database
+sqlalchemy>=2.0.0
+alembic>=1.13.0
+psycopg2-binary>=2.9.9
+
+# Data Processing
+pandas>=2.1.0
+numpy>=1.24.0
+openpyxl>=3.1.0
+python-docx>=1.1.0
+python-pptx>=0.6.23
+
+# Visualization
+plotly>=5.18.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# Utilities
+python-dotenv>=1.0.0
+python-dateutil>=2.8.2
+pytz>=2023.3
+requests>=2.31.0
+httpx>=0.26.0
+
+# Email
+email-validator>=2.1.0
+python-multipart>=0.0.6
+
+# Security
+bcrypt>=4.1.0
+python-jose[cryptography]>=3.3.0
+passlib>=1.7.4
+
+# Async Support
+aiofiles>=23.2.1
+asyncio>=3.4.3
+
+# Monitoring & Logging
+loguru>=0.7.2
+sentry-sdk>=1.40.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.12.0
+pytest-timeout>=2.2.0
+pytest-xdist>=3.5.0
+httpx>=0.26.0
+
+# Code Quality
+black>=23.12.0
+flake8>=7.0.0
+isort>=5.13.0
+mypy>=1.8.0
+pylint>=3.0.0
+bandit>=1.7.0
+safety>=3.0.0
+
+# Development Tools
+ipython>=8.18.0
+jupyter>=1.0.0
+pre-commit>=3.6.0
+
+# Documentation
+mkdocs>=1.5.0
+mkdocs-material>=9.5.0
+
+# Additional Libraries
+pillow>=10.1.0
+reportlab>=4.0.0
+pyyaml>=6.0.1
+toml>=0.10.2
+click>=8.1.7
+rich>=13.7.0
+tqdm>=4.66.0
