@@ -205,3 +205,13 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# NEXUS Platform specific
+documents/
+temp/
+logs/
+.streamlit/secrets.toml
+*.docx
+*.pdf
+!assets/templates/*.docx
+!assets/templates/*.pdf
