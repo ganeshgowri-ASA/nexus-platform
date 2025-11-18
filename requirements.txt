@@ -1,0 +1,71 @@
+# NEXUS Platform - Python Dependencies
+
+# Core Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.4.2
+pydantic-settings==2.0.3
+
+# Database
+sqlalchemy==2.0.23
+alembic==1.12.1
+
+# Template Engine
+jinja2==3.1.2
+
+# Email Providers
+# For SMTP (built-in)
+# For SendGrid (optional)
+# sendgrid==6.10.0
+# For AWS SES (optional)
+# boto3==1.29.7
+
+# SMS Providers
+# For Twilio (optional)
+# twilio==8.10.0
+# For AWS SNS (optional)
+# boto3==1.29.7
+
+# Push Notifications
+# For Firebase Cloud Messaging (optional)
+# firebase-admin==6.2.0
+# For Apple Push Notifications (optional)
+# apns2==0.7.2
+
+# Async Support
+aiofiles==23.2.1
+httpx==0.25.1
+
+# Utilities
+python-dotenv==1.0.0
+python-multipart==0.0.6
+
+# Security
+cryptography==41.0.7
+
+# Date/Time
+python-dateutil==2.8.2
+
+# Development (optional)
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+mypy==1.7.1
+flake8==6.1.0
+
+# Database Drivers (choose based on your database)
+# SQLite is built-in
+# For PostgreSQL:
+# psycopg2-binary==2.9.9
+# For MySQL:
+# pymysql==1.1.0
+# mysqlclient==2.2.0
+
+# Monitoring and Logging (optional)
+# sentry-sdk==1.38.0
+# loguru==0.7.2
+
+# Task Queue (for advanced scheduling - optional)
+# celery==5.3.4
+# redis==5.0.1
+# APScheduler==3.10.4
