@@ -1,0 +1,49 @@
+# Core dependencies
+streamlit==1.31.0
+sqlalchemy==2.0.25
+pydantic==2.6.0
+pydantic-settings==2.1.0
+python-dotenv==1.0.1
+
+# AI/ML
+anthropic==0.18.1
+openai==1.12.0
+
+# Rich Text & Document Processing
+markdown==3.5.2
+markdown2==2.4.12
+bleach==6.1.0
+html2text==2020.1.16
+python-docx==1.1.0
+reportlab==4.0.9
+weasyprint==60.2
+
+# File handling
+python-magic==0.4.27
+pillow==10.2.0
+pypdf2==3.0.1
+
+# Search & indexing
+whoosh==2.7.4
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2024.1
+shortuuid==1.0.13
+click==8.1.7
+
+# Testing
+pytest==7.4.4
+pytest-cov==4.1.0
+pytest-asyncio==0.23.4
+pytest-mock==3.12.0
+
+# Code quality
+black==24.1.1
+ruff==0.2.1
+mypy==1.8.0
+pre-commit==3.6.0
+
+# Development
+ipython==8.21.0
+ipdb==0.13.13

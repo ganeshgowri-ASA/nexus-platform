@@ -205,3 +205,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Nexus Platform specific
+nexus.db
+*.db
+uploads/
+.streamlit/
+*.pdf
+*.docx
