@@ -1,0 +1,55 @@
+# NEXUS Platform - Database Manager Requirements
+
+# Web Framework
+streamlit>=1.28.0
+streamlit-option-menu>=0.3.6
+
+# Database Drivers
+psycopg2-binary>=2.9.9  # PostgreSQL
+pymysql>=1.1.0          # MySQL
+pymongo>=4.6.0          # MongoDB
+# mysql-connector-python>=8.2.0  # Alternative MySQL driver
+
+# Database Utilities
+sqlalchemy>=2.0.23
+DBUtils>=3.1.0
+
+# Data Processing
+pandas>=2.1.3
+numpy>=1.26.2
+
+# Visualization
+plotly>=5.18.0
+matplotlib>=3.8.2
+
+# Testing
+pytest>=7.4.3
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+
+# Code Quality
+black>=23.12.0
+flake8>=6.1.0
+mypy>=1.7.1
+pylint>=3.0.3
+
+# Utilities
+python-dotenv>=1.0.0
+pyyaml>=6.0.1
+toml>=0.10.2
+
+# Security
+cryptography>=41.0.7
+bcrypt>=4.1.2
+
+# Logging & Monitoring
+loguru>=0.7.2
+
+# Documentation
+mkdocs>=1.5.3
+mkdocs-material>=9.5.2
+
+# Optional: Additional Database Support
+# pyodbc>=5.0.1           # SQL Server (Windows)
+# cx_Oracle>=8.3.0        # Oracle
+# cassandra-driver>=3.28.0  # Cassandra
