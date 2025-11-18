@@ -1,0 +1,12 @@
+# NEXUS Platform Requirements
+
+# Core
+streamlit>=1.28.0
+pyyaml>=6.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Optional for enhanced features
+requests>=2.31.0  # For API testing
