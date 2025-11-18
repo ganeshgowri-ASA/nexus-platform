@@ -1,0 +1,59 @@
+{
+  "name": "Project Planning Template",
+  "description": "Template for planning a new project",
+  "structure": {
+    "root": "Project Name",
+    "children": [
+      {
+        "text": "Goals & Objectives",
+        "children": [
+          {"text": "Primary Goal"},
+          {"text": "Key Performance Indicators"},
+          {"text": "Success Metrics"}
+        ]
+      },
+      {
+        "text": "Stakeholders",
+        "children": [
+          {"text": "Team Members"},
+          {"text": "Clients"},
+          {"text": "Partners"}
+        ]
+      },
+      {
+        "text": "Phases",
+        "children": [
+          {"text": "Phase 1: Planning"},
+          {"text": "Phase 2: Design"},
+          {"text": "Phase 3: Development"},
+          {"text": "Phase 4: Testing"},
+          {"text": "Phase 5: Launch"}
+        ]
+      },
+      {
+        "text": "Resources",
+        "children": [
+          {"text": "Budget"},
+          {"text": "Tools & Technology"},
+          {"text": "Team Skills"}
+        ]
+      },
+      {
+        "text": "Risks & Mitigation",
+        "children": [
+          {"text": "Technical Risks"},
+          {"text": "Business Risks"},
+          {"text": "Contingency Plans"}
+        ]
+      },
+      {
+        "text": "Timeline",
+        "children": [
+          {"text": "Milestones"},
+          {"text": "Deadlines"},
+          {"text": "Dependencies"}
+        ]
+      }
+    ]
+  }
+}
