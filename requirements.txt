@@ -1,0 +1,22 @@
+# Core dependencies
+streamlit>=1.28.0
+python-dotenv>=1.0.0
+
+# Logging dependencies
+structlog>=23.2.0
+python-json-logger>=2.0.7
+colorama>=0.4.6
+
+# API framework for log search
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.5.0
+
+# Database for log storage
+sqlalchemy>=2.0.23
+alembic>=1.13.0
+
+# Additional utilities
+aiofiles>=23.2.1
+python-dateutil>=2.8.2
+pytz>=2023.3
