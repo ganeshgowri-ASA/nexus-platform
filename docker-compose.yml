@@ -1,0 +1,169 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: nexus_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nexus_platform
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: nexus_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Image Recognition API
+  image_recognition_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_image_api
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./modules/image_recognition:/app/modules/image_recognition
+      - uploads:/tmp/nexus_uploads
+    command: uvicorn modules.image_recognition.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Testing API
+  testing_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.testing
+    container_name: nexus_testing_api
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./modules/testing:/app/modules/testing
+    command: uvicorn modules.testing.api.main:app --host 0.0.0.0 --port 8001 --reload
+
+  # Celery Worker for Image Recognition
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_celery_worker
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./modules/image_recognition:/app/modules/image_recognition
+    command: celery -A modules.image_recognition.tasks.celery_tasks worker --loglevel=info
+
+  # Celery Beat for Scheduled Tasks
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_celery_beat
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./modules/image_recognition:/app/modules/image_recognition
+    command: celery -A modules.image_recognition.tasks.celery_tasks beat --loglevel=info
+
+  # Flower - Celery Monitoring
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_flower
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+    command: celery -A modules.image_recognition.tasks.celery_tasks flower --port=5555
+
+  # Image Recognition Streamlit UI
+  image_recognition_ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: nexus_image_ui
+    environment:
+      - IMAGE_API_URL=http://image_recognition_api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - image_recognition_api
+    volumes:
+      - ./modules/image_recognition/ui:/app/ui
+    command: streamlit run ui/streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+
+  # Testing Streamlit UI
+  testing_ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: nexus_testing_ui
+    environment:
+      - TESTING_API_URL=http://testing_api:8001
+    ports:
+      - "8502:8502"
+    depends_on:
+      - testing_api
+    volumes:
+      - ./modules/testing/ui:/app/ui
+    command: streamlit run ui/streamlit_app.py --server.port=8502 --server.address=0.0.0.0
+
+volumes:
+  postgres_data:
+  redis_data:
+  uploads:
