@@ -1,0 +1,269 @@
+version: '3.8'
+
+###############################################################################
+# NEXUS Platform - Docker Compose Configuration
+#
+# This compose file sets up the complete NEXUS platform stack:
+# - PostgreSQL database
+# - Redis cache and message broker
+# - FastAPI backend API
+# - Streamlit frontend
+# - Celery worker for async tasks
+# - Flower for Celery monitoring
+# - (Optional) Elasticsearch for advanced search
+#
+# Usage:
+#   Development: docker-compose up
+#   Production:  docker-compose -f docker-compose.yml up -d
+#   With ES:     docker-compose --profile elasticsearch up
+###############################################################################
+
+services:
+  ###############################################################################
+  # PostgreSQL Database
+  ###############################################################################
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_password
+      POSTGRES_DB: nexus_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus_user -d nexus_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  ###############################################################################
+  # Redis - Cache and Message Broker
+  ###############################################################################
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  ###############################################################################
+  # FastAPI Backend
+  ###############################################################################
+  backend:
+    build:
+      context: .
+      target: runtime
+      dockerfile: Dockerfile
+    container_name: nexus-backend
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/2
+      - CELERY_RESULT_BACKEND=redis://redis:6379/3
+      - SECRET_KEY=${SECRET_KEY:-change-this-in-production-use-strong-secret-key-minimum-32-chars}
+      - BACKEND_CORS_ORIGINS=http://localhost:8501,http://frontend:8501
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./storage:/app/storage
+      - ./logs:/app/logs
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - nexus-network
+    restart: unless-stopped
+    command: >
+      sh -c "
+        python scripts/init_db.py --create-admin --admin-email admin@nexus.local --admin-password Admin@123 &&
+        uvicorn backend.main:app --host 0.0.0.0 --port 8000
+      "
+
+  ###############################################################################
+  # Streamlit Frontend
+  ###############################################################################
+  frontend:
+    build:
+      context: .
+      target: runtime
+      dockerfile: Dockerfile
+    container_name: nexus-frontend
+    environment:
+      - BACKEND_API_URL=http://backend:8000
+      - STREAMLIT_SERVER_PORT=8501
+    volumes:
+      - ./frontend:/app/frontend
+      - ./logs:/app/logs
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - nexus-network
+    restart: unless-stopped
+    command: >
+      streamlit run frontend/app.py
+      --server.port 8501
+      --server.address 0.0.0.0
+      --server.headless true
+      --browser.gatherUsageStats false
+
+  ###############################################################################
+  # Celery Worker - Async Task Processing
+  ###############################################################################
+  celery-worker:
+    build:
+      context: .
+      target: runtime
+      dockerfile: Dockerfile
+    container_name: nexus-celery-worker
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/2
+      - CELERY_RESULT_BACKEND=redis://redis:6379/3
+      - SECRET_KEY=${SECRET_KEY:-change-this-in-production-use-strong-secret-key-minimum-32-chars}
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./storage:/app/storage
+      - ./logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    restart: unless-stopped
+    command: python scripts/celery_worker.py --loglevel info --concurrency 4
+
+  ###############################################################################
+  # Celery Beat - Periodic Task Scheduler
+  ###############################################################################
+  celery-beat:
+    build:
+      context: .
+      target: runtime
+      dockerfile: Dockerfile
+    container_name: nexus-celery-beat
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/2
+      - CELERY_RESULT_BACKEND=redis://redis:6379/3
+      - SECRET_KEY=${SECRET_KEY:-change-this-in-production-use-strong-secret-key-minimum-32-chars}
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./storage:/app/storage
+      - ./logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    restart: unless-stopped
+    command: celery -A scripts.celery_worker:get_celery_app beat --loglevel=info
+
+  ###############################################################################
+  # Flower - Celery Monitoring
+  ###############################################################################
+  flower:
+    build:
+      context: .
+      target: runtime
+      dockerfile: Dockerfile
+    container_name: nexus-flower
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/2
+      - CELERY_RESULT_BACKEND=redis://redis:6379/3
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery-worker
+    networks:
+      - nexus-network
+    restart: unless-stopped
+    command: celery -A scripts.celery_worker:get_celery_app flower --port=5555
+
+  ###############################################################################
+  # Elasticsearch - Advanced Search (Optional)
+  ###############################################################################
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: nexus-elasticsearch
+    profiles:
+      - elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+###############################################################################
+# Volumes
+###############################################################################
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+
+###############################################################################
+# Networks
+###############################################################################
+networks:
+  nexus-network:
+    driver: bridge
+    name: nexus-network
