@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_DB: nexus_platform
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-api
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus_dev_password@postgres:5432/nexus_platform
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+      - DEBUG=True
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-ui
+    command: streamlit run src/ui/streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8000
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-celery-worker
+    command: celery -A src.services.task_queue.celery_app worker --loglevel=info --concurrency=4
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus_dev_password@postgres:5432/nexus_platform
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-celery-beat
+    command: celery -A src.services.task_queue.celery_app beat --loglevel=info
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus_dev_password@postgres:5432/nexus_platform
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-flower
+    command: celery -A src.services.task_queue.celery_app flower --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery_worker
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+
+volumes:
+  postgres_data:
+  redis_data:
