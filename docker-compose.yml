@@ -1,0 +1,190 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: timescale/timescaledb:latest-pg15
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_DB: nexus_analytics
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus -d nexus_analytics"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+
+  # InfluxDB Time Series Database
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: nexus-influxdb
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: nexus
+      DOCKER_INFLUXDB_INIT_PASSWORD: nexus_password
+      DOCKER_INFLUXDB_INIT_ORG: nexus
+      DOCKER_INFLUXDB_INIT_BUCKET: analytics
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: nexus_admin_token
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+    networks:
+      - nexus-network
+
+  # FastAPI Backend
+  api:
+    build:
+      context: .
+      target: development
+    container_name: nexus-api
+    command: python app.py api --host 0.0.0.0 --port 8000 --workers 4
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus_analytics
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      INFLUXDB_URL: http://influxdb:8086
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+      - ./exports:/app/exports
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Streamlit Dashboard
+  dashboard:
+    build:
+      context: .
+      target: development
+    container_name: nexus-dashboard
+    command: python app.py streamlit --host 0.0.0.0 --port 8501
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus_analytics
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+      - api
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Celery Worker
+  celery-worker:
+    build:
+      context: .
+      target: development
+    container_name: nexus-celery-worker
+    command: python app.py celery-worker --loglevel=info
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus_analytics
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Celery Beat Scheduler
+  celery-beat:
+    build:
+      context: .
+      target: development
+    container_name: nexus-celery-beat
+    command: python app.py celery-beat --loglevel=info
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus_analytics
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Flower (Celery Monitoring)
+  flower:
+    build:
+      context: .
+      target: development
+    container_name: nexus-flower
+    command: python app.py flower
+    env_file:
+      - .env
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery-worker
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  influxdb_data:
+
+networks:
+  nexus-network:
+    driver: bridge
