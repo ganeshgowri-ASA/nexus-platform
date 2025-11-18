@@ -1,0 +1,137 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_pass
+      POSTGRES_DB: nexus_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Celery Worker for Image Recognition
+  celery-image-recognition:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.image-recognition
+    container_name: nexus-celery-image
+    command: celery -A modules.image_recognition.services.celery_tasks worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_pass@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./uploads:/app/uploads
+
+  # Image Recognition API
+  image-recognition-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.image-recognition
+    container_name: nexus-image-recognition
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_pass@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./uploads:/app/uploads
+      - ./models:/app/models
+
+  # Testing & QA API
+  testing-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.testing
+    container_name: nexus-testing
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_pass@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/1
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./test_results:/app/test_results
+      - ./test_reports:/app/test_reports
+      - ./screenshots:/app/screenshots
+
+  # Image Recognition Streamlit UI
+  image-recognition-ui:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.image-recognition
+    container_name: nexus-image-recognition-ui
+    command: streamlit run modules/image_recognition/ui/streamlit_app.py --server.port=8501
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://image-recognition-api:8001
+    depends_on:
+      - image-recognition-api
+
+  # Testing Streamlit UI
+  testing-ui:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.testing
+    container_name: nexus-testing-ui
+    command: streamlit run modules/testing/ui/streamlit_app.py --server.port=8502
+    ports:
+      - "8502:8502"
+    environment:
+      - API_BASE_URL=http://testing-api:8002
+    depends_on:
+      - testing-api
+
+  # Flower (Celery Monitoring)
+  flower:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.image-recognition
+    container_name: nexus-flower
+    command: celery -A modules.image_recognition.services.celery_tasks flower --port=5555
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+
+volumes:
+  postgres_data:
+  redis_data:
