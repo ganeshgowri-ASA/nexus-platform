@@ -1,0 +1,167 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nexus
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI Backend
+  api:
+    build: .
+    container_name: nexus-api
+    command: uvicorn api_server:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Streamlit UI
+  streamlit:
+    build: .
+    container_name: nexus-streamlit
+    command: streamlit run main.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Celery Worker
+  celery-worker:
+    build: .
+    container_name: nexus-celery-worker
+    command: celery -A modules.pipeline.tasks worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Celery Beat (Scheduler)
+  celery-beat:
+    build: .
+    container_name: nexus-celery-beat
+    command: celery -A modules.pipeline.tasks beat --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Flower (Celery Monitoring)
+  flower:
+    build: .
+    container_name: nexus-flower
+    command: celery -A modules.pipeline.tasks flower --port=5555
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      - redis
+      - celery-worker
+
+  # Apache Airflow (Optional - uncomment to enable)
+  # airflow-webserver:
+  #   image: apache/airflow:2.7.0
+  #   container_name: nexus-airflow-webserver
+  #   command: webserver
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+  #     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://postgres:postgres@postgres:5432/airflow
+  #     - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/3
+  #     - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://postgres:postgres@postgres:5432/airflow
+  #   volumes:
+  #     - ./airflow/dags:/opt/airflow/dags
+  #     - ./airflow/logs:/opt/airflow/logs
+  #     - ./airflow/plugins:/opt/airflow/plugins
+  #   depends_on:
+  #     - postgres
+  #     - redis
+
+  # airflow-scheduler:
+  #   image: apache/airflow:2.7.0
+  #   container_name: nexus-airflow-scheduler
+  #   command: scheduler
+  #   environment:
+  #     - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+  #     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://postgres:postgres@postgres:5432/airflow
+  #     - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/3
+  #     - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://postgres:postgres@postgres:5432/airflow
+  #   volumes:
+  #     - ./airflow/dags:/opt/airflow/dags
+  #     - ./airflow/logs:/opt/airflow/logs
+  #     - ./airflow/plugins:/opt/airflow/plugins
+  #   depends_on:
+  #     - postgres
+  #     - redis
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  default:
+    name: nexus-network
