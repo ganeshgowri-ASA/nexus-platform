@@ -1,4 +1,5 @@
 """
+<<<<<<< HEAD
 API routers for all NEXUS modules
 """
 
@@ -23,3 +24,15 @@ __all__ = [
     "files_router",
     "ai_router",
 ]
+=======
+NEXUS Platform API Routers
+
+FastAPI routers for all platform modules.
+
+Author: NEXUS Platform Team
+"""
+
+from . import wiki
+
+__all__ = ["wiki"]
+>>>>>>> origin/claude/nexus-wiki-system-014QYW66NHVN69yKZhJKr3Uq
