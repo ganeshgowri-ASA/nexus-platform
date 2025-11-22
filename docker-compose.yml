@@ -2,7 +2,29 @@ version: '3.8'
 
 services:
 <<<<<<< HEAD
+<<<<<<< HEAD
   # Redis - Message Broker and Result Backend
+=======
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nexus_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
   redis:
     image: redis:7-alpine
     container_name: nexus-redis
@@ -10,6 +32,7 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+<<<<<<< HEAD
     command: redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -218,3 +241,67 @@ networks:
   nexus:
     driver: bridge
 >>>>>>> origin/claude/elasticsearch-search-implementation-013e5Tg92YLzoP4Dme7tcjZR
+=======
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # FastAPI Application
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://nexus:password@postgres:5432/nexus_db
+      REDIS_URL: redis://redis:6379/0
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+      ENVIRONMENT: production
+      LOG_LEVEL: INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+    command: python -m modules.ab_testing.api.main
+
+  # Streamlit UI
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-ui
+    ports:
+      - "8501:8501"
+    environment:
+      DATABASE_URL: postgresql://nexus:password@postgres:5432/nexus_db
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - api
+    command: streamlit run modules/ab_testing/ui/app.py --server.port=8501 --server.address=0.0.0.0
+
+  # Database Migrations
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-migrations
+    environment:
+      DATABASE_URL: postgresql://nexus:password@postgres:5432/nexus_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: alembic upgrade head
+    restart: on-failure
+
+volumes:
+  postgres_data:
+  redis_data:
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA

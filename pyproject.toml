@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 [build-system]
 requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
@@ -9,10 +10,19 @@ version = "0.1.0"
 description = "NEXUS: Unified AI-powered productivity platform with 24 integrated modules"
 readme = "README.md"
 requires-python = ">=3.9"
+=======
+[project]
+name = "nexus-platform"
+version = "1.0.0"
+description = "NEXUS: Unified AI-powered productivity platform with A/B testing module"
+readme = "README.md"
+requires-python = ">=3.11"
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 license = {text = "MIT"}
 authors = [
     {name = "NEXUS Team"}
 ]
+<<<<<<< HEAD
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -36,10 +46,37 @@ dependencies = [
     "aiofiles>=23.2.1",
     "python-dateutil>=2.8.2",
     "pytz>=2023.3",
+=======
+
+dependencies = [
+    "fastapi>=0.109.2",
+    "uvicorn[standard]>=0.27.1",
+    "pydantic>=2.6.1",
+    "pydantic-settings>=2.1.0",
+    "sqlalchemy>=2.0.25",
+    "psycopg2-binary>=2.9.9",
+    "alembic>=1.13.1",
+    "redis>=5.0.1",
+    "hiredis>=2.3.2",
+    "numpy>=1.26.4",
+    "scipy>=1.12.0",
+    "pandas>=2.2.0",
+    "statsmodels>=0.14.1",
+    "streamlit>=1.31.1",
+    "plotly>=5.18.0",
+    "altair>=5.2.0",
+    "python-dotenv>=1.0.1",
+    "python-multipart>=0.0.9",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "loguru>=0.7.2",
+    "prometheus-client>=0.19.0",
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 ]
 
 [project.optional-dependencies]
 dev = [
+<<<<<<< HEAD
     "pytest>=7.4.0",
     "pytest-asyncio>=0.21.0",
     "pytest-cov>=4.1.0",
@@ -198,11 +235,27 @@ watchdog = "^4.0.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+=======
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.4",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.26.0",
+    "black>=24.1.1",
+    "ruff>=0.2.1",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 
 [tool.black]
 line-length = 100
 target-version = ['py311']
 include = '\.pyi?$'
+<<<<<<< HEAD
 exclude = '''
 /(
     \.git
@@ -216,11 +269,14 @@ exclude = '''
   | alembic
 )/
 '''
+=======
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
 select = [
+<<<<<<< HEAD
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
     "F",   # pyflakes
@@ -231,10 +287,23 @@ select = [
 ]
 ignore = [
     "E501",  # line too long (handled by black)
+=======
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
     "B008",  # do not perform function calls in argument defaults
     "C901",  # too complex
 ]
 
+<<<<<<< HEAD
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]
 >>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
@@ -260,11 +329,14 @@ markers = [
     "unit: marks tests as unit tests",
 ]
 
+=======
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 [tool.mypy]
 python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
+<<<<<<< HEAD
 plugins = ["pydantic.mypy"]
 
 [[tool.mypy.overrides]]
@@ -287,6 +359,28 @@ omit = [
 
 [tool.coverage.report]
 precision = 2
+=======
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q --strict-markers --cov=modules --cov-report=term-missing --cov-report=html"
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["modules"]
+omit = ["*/tests/*", "*/migrations/*"]
+
+[tool.coverage.report]
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
@@ -294,7 +388,11 @@ exclude_lines = [
     "raise NotImplementedError",
     "if __name__ == .__main__.:",
     "if TYPE_CHECKING:",
+<<<<<<< HEAD
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
 >>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
+=======
+]
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA

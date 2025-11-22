@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Python
 __pycache__/
 =======
@@ -10,10 +11,19 @@ __pycache__/
 # Python
 __pycache__
 >>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
+=======
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 *.py[cod]
 *$py.class
 *.so
 .Python
+<<<<<<< HEAD
 <<<<<<< HEAD
 env/
 venv/
@@ -24,6 +34,8 @@ build/
 
 # IDE
 =======
+=======
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 build/
 develop-eggs/
 dist/
@@ -41,6 +53,7 @@ wheels/
 *.egg
 MANIFEST
 
+<<<<<<< HEAD
 # Virtual environments
 venv/
 .venv/
@@ -64,11 +77,14 @@ venv.bak/
 =======
 .DS_Store
 
+=======
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
 .tox/
+<<<<<<< HEAD
 .hypothesis/
 *.cover
 .cache
@@ -116,10 +132,37 @@ docker-compose.yml
 # Documentation
 *.md
 !README.md
+=======
+.nox/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Logs
+logs/
+*.log
+
+# Documentation
+docs/_build/
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 
 # OS
 .DS_Store
 Thumbs.db
+<<<<<<< HEAD
 =======
 .env.*.local
 
@@ -145,3 +188,9 @@ docker-compose*.yml
 .cache/
 tmp/
 >>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
+=======
+
+# Project specific
+.ruff_cache/
+.mypy_cache/
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
