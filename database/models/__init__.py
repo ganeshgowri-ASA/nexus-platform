@@ -1,13 +1,8 @@
 """Database models for NEXUS Platform."""
 
-from .base import Base, TimestampMixin
-from .batch_job import BatchJob, BatchTask, TaskStatus, JobStatus
+from database import Base
 
-__all__ = [
-    "Base",
-    "TimestampMixin",
-    "BatchJob",
-    "BatchTask",
-    "TaskStatus",
-    "JobStatus",
-]
+# DO NOT import any models here - prevents circular dependencies
+# Models should be imported directly where needed
+
+__all__ = ["Base"]
