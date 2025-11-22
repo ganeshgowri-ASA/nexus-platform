@@ -207,6 +207,7 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
+<<<<<<< HEAD
 # NEXUS Platform specific
 <<<<<<< HEAD
 # Data directory with uploaded files
@@ -231,3 +232,12 @@ logs/
 !assets/templates/*.docx
 !assets/templates/*.pdf
 >>>>>>> origin/claude/word-editor-module-01PPyUEeNUgZmU4swtfxgoCB
+=======
+# Nexus Platform specific
+nexus.db
+*.db
+uploads/
+.streamlit/
+*.pdf
+*.docx
+>>>>>>> origin/claude/notes-taking-module-013StF1A3r6dn5NufjWAXYTn
