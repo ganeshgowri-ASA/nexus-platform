@@ -11,6 +11,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -117,10 +118,19 @@ version: '3.8'
 
 services:
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+version: '3.8'
+
+services:
+  # ============================================================================
+  # PostgreSQL Database
+  # ============================================================================
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
   postgres:
     image: postgres:16-alpine
     container_name: nexus-postgres
     environment:
+<<<<<<< HEAD
 <<<<<<< HEAD
       POSTGRES_USER: ${POSTGRES_USER:-nexus}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nexus_password}
@@ -283,16 +293,25 @@ services:
       POSTGRES_DB: nexus_db
       POSTGRES_USER: nexus_user
       POSTGRES_PASSWORD: nexus_password
+=======
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_password
+      POSTGRES_DB: nexus_db
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+<<<<<<< HEAD
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U nexus_user"]
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
 <<<<<<< HEAD
     networks:
       - nexus-network
@@ -534,10 +553,19 @@ volumes:
   # Redis Cache
 <<<<<<< HEAD
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+    networks:
+      - nexus-network
+
+  # ============================================================================
+  # Redis Cache & Message Broker
+  # ============================================================================
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
   redis:
     image: redis:7-alpine
     container_name: nexus-redis
     command: redis-server --appendonly yes
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 version: '3.8'
@@ -564,10 +592,13 @@ services:
     image: redis:6-alpine
     container_name: nexus-redis
 >>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
+=======
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
     volumes:
       - redis_data:/data
     ports:
       - "6379:6379"
+<<<<<<< HEAD
 <<<<<<< HEAD
     networks:
       - nexus
@@ -963,11 +994,71 @@ networks:
     volumes:
       - .:/app
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+
+  # ============================================================================
+  # MinIO Object Storage
+  # ============================================================================
+  minio:
+    image: minio/minio:latest
+    container_name: nexus-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - nexus-network
+
+  # ============================================================================
+  # NEXUS Web Application
+  # ============================================================================
+  app:
+    build:
+      context: .
+      target: production
+    container_name: nexus-app
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      - STORAGE_PROVIDER=minio
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_BUCKET=nexus-documents
+      - MINIO_SECURE=false
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    ports:
+      - "8501:8501"
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     volumes:
@@ -1005,11 +1096,37 @@ networks:
 =======
     command: celery -A src.services.task_queue.celery_app beat --loglevel=info
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # ============================================================================
+  # FastAPI Backend
+  # ============================================================================
+  api:
+    build:
+      context: .
+      target: production
+    container_name: nexus-api
+    command: uvicorn nexus.api.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    ports:
+      - "8000:8000"
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+<<<<<<< HEAD
 <<<<<<< HEAD
     volumes:
       - ./modules:/app/modules
@@ -1238,6 +1355,82 @@ volumes:
       - nexus-network
     profiles:
       - development
+=======
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # ============================================================================
+  # Celery Worker
+  # ============================================================================
+  celery-worker:
+    build:
+      context: .
+      target: production
+    container_name: nexus-celery-worker
+    command: celery -A nexus.core.celery_app worker --loglevel=info --concurrency=4
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # ============================================================================
+  # Celery Beat Scheduler
+  # ============================================================================
+  celery-beat:
+    build:
+      context: .
+      target: production
+    container_name: nexus-celery-beat
+    command: celery -A nexus.core.celery_app beat --loglevel=info
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # ============================================================================
+  # Flower - Celery Monitoring
+  # ============================================================================
+  flower:
+    build:
+      context: .
+      target: production
+    container_name: nexus-flower
+    command: celery -A nexus.core.celery_app flower --port=5555
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    ports:
+      - "5555:5555"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    restart: unless-stopped
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
 
 # ============================================================================
 # Volumes
@@ -1247,11 +1440,15 @@ volumes:
     driver: local
   redis_data:
     driver: local
+<<<<<<< HEAD
   prometheus_data:
     driver: local
   grafana_data:
     driver: local
   pgadmin_data:
+=======
+  minio_data:
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
     driver: local
 
 # ============================================================================
@@ -1260,6 +1457,7 @@ volumes:
 networks:
   nexus-network:
     driver: bridge
+<<<<<<< HEAD
     ipam:
       config:
         - subnet: 172.25.0.0/16
@@ -2103,3 +2301,5 @@ volumes:
 >>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
 =======
 >>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
+=======
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D

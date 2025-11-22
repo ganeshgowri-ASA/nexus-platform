@@ -9,6 +9,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM python:3.11-slim
 
 <<<<<<< HEAD
@@ -113,11 +114,20 @@ FROM python:3.11-slim as base
 # Multi-stage Dockerfile for NEXUS Platform
 FROM python:3.11-slim as base
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+# Multi-stage Dockerfile for NEXUS Platform
+
+# ============================================================================
+# Stage 1: Base
+# ============================================================================
+FROM python:3.11-slim as base
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -311,11 +321,23 @@ COPY migrations/ ./migrations/
 COPY alembic.ini ./
 COPY .env.example ./.env
 =======
+=======
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    git \
+    libpq-dev \
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
     postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Create app directory
 WORKDIR /app
+<<<<<<< HEAD
 =======
 FROM python:3.11-slim
 
@@ -361,11 +383,34 @@ ENV PATH=/home/nexus/.local/bin:$PATH
 =======
 # Development stage
 FROM base as development
+=======
+
+# ============================================================================
+# Stage 2: Dependencies
+# ============================================================================
+FROM base as dependencies
+
+# Copy requirements
+COPY pyproject.toml ./
+
+# Install Python dependencies
+RUN pip install --upgrade pip setuptools wheel && \
+    pip install -e .
+
+# ============================================================================
+# Stage 3: Development
+# ============================================================================
+FROM dependencies as development
+
+# Install development dependencies
+RUN pip install -e ".[dev]"
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
 
 # Copy application code
 COPY . .
 
 # Expose ports
+<<<<<<< HEAD
 EXPOSE 8000 8501 5555
 
 CMD ["python", "app.py", "api"]
@@ -386,14 +431,39 @@ COPY --chown=nexus:nexus . .
 # Create necessary directories
 RUN mkdir -p logs data uploads temp && \
     chown -R nexus:nexus logs data uploads temp
+=======
+EXPOSE 8501 8000 8001 9090
+
+# Default command for development
+CMD ["streamlit", "run", "nexus/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
+# ============================================================================
+# Stage 4: Production
+# ============================================================================
+FROM dependencies as production
+
+# Copy application code
+COPY . .
+
+# Create non-root user
+RUN groupadd -r nexus && useradd -r -g nexus nexus && \
+    chown -R nexus:nexus /app
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
 
 # Switch to non-root user
 USER nexus
 
+<<<<<<< HEAD
+=======
+# Expose ports
+EXPOSE 8501 8000 8001
+
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD curl -f http://localhost:8501/_stcore/health || exit 1
 
+<<<<<<< HEAD
 # Expose port
 EXPOSE 8501
 
@@ -521,3 +591,7 @@ EXPOSE 8000 8501
 # Default command (can be overridden)
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 >>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
+=======
+# Default command for production
+CMD ["streamlit", "run", "nexus/app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true"]
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D

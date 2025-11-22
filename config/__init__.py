@@ -4,6 +4,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Configuration package for Nexus Platform"""
 from config.settings import settings
 from config.celery_config import celery_app
@@ -21,10 +22,18 @@ __all__ = ['settings']
 >>>>>>> origin/claude/productivity-suite-ai-01Uq8q3V9EdvDAuMPqDoBxZh
 =======
 """Configuration module for NEXUS platform."""
+=======
+"""
+NEXUS Platform Configuration Package
+
+This package contains all configuration modules for the NEXUS platform.
+"""
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
 
 from .settings import settings
 
 __all__ = ["settings"]
+<<<<<<< HEAD
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 =======
 """Configuration module for NEXUS platform."""
@@ -55,3 +64,5 @@ __all__ = [
     "get_logger",
 ]
 >>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
+=======
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
