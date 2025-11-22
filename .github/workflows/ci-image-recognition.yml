@@ -1,0 +1,113 @@
+name: CI/CD - Image Recognition
+
+on:
+  push:
+    branches: [ main, develop, claude/* ]
+    paths:
+      - 'modules/image_recognition/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'modules/image_recognition/**'
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test Image Recognition Module
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: nexus_user
+          POSTGRES_PASSWORD: nexus_pass
+          POSTGRES_DB: nexus_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql://nexus_user:nexus_pass@localhost:5432/nexus_db
+          REDIS_URL: redis://localhost:6379/0
+        run: |
+          pytest modules/image_recognition/tests \
+            -v \
+            --cov=modules/image_recognition \
+            --cov-report=xml \
+            --cov-report=html
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          flags: image-recognition
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install linters
+        run: |
+          pip install flake8 black pylint
+
+      - name: Run flake8
+        run: flake8 modules/image_recognition
+
+      - name: Run black
+        run: black --check modules/image_recognition
+
+      - name: Run pylint
+        run: pylint modules/image_recognition
+
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: |
+          docker build -t nexus-image-recognition:${{ github.sha }} \
+            -f docker/Dockerfile.image-recognition .
+
+      - name: Test Docker image
+        run: |
+          docker run --rm nexus-image-recognition:${{ github.sha }} python -c "import modules.image_recognition; print('OK')"

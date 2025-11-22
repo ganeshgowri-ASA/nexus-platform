@@ -1,5 +1,6 @@
 """
 NEXUS Image Recognition Module
+<<<<<<< HEAD
 
 Production-ready image recognition system with support for:
 - Image classification (single and multi-label)
@@ -85,3 +86,9 @@ def get_module_info() -> Dict[str, Any]:
             "Custom Models",
         ],
     }
+=======
+Object detection, image classification, face detection, and scene recognition.
+"""
+
+__version__ = "1.0.0"
+>>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak

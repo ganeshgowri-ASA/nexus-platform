@@ -7,6 +7,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """NEXUS Platform modules."""
 =======
 """NEXUS Platform Modules."""
@@ -140,3 +141,9 @@ NEXUS Platform Modules.
 =======
 """NEXUS Platform modules."""
 >>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
+=======
+"""
+NEXUS Platform Modules
+"""
+__version__ = "1.0.0"
+>>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
