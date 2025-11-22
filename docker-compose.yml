@@ -8,6 +8,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -72,10 +73,13 @@ services:
 >>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
 =======
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
 version: '3.8'
 
 services:
   # PostgreSQL Database
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -87,10 +91,13 @@ services:
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 =======
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+=======
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
   postgres:
     image: postgres:15-alpine
     container_name: nexus-postgres
     environment:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -212,6 +219,15 @@ services:
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
 =======
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus_password
+      POSTGRES_DB: nexus
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U nexus"]
       interval: 10s
@@ -219,10 +235,14 @@ services:
       retries: 5
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
     networks:
       - nexus-network
 
   # Redis Cache & Message Broker
+<<<<<<< HEAD
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 =======
 
@@ -559,11 +579,19 @@ networks:
 >>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
 =======
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    ports:
+      - "6379:6379"
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -1722,11 +1750,18 @@ volumes:
   influxdb_data:
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
 =======
+=======
+    networks:
+      - nexus-network
+
+  # Backend API
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
   backend:
     build:
       context: .
       dockerfile: docker/Dockerfile.backend
     container_name: nexus-backend
+<<<<<<< HEAD
     environment:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
@@ -1754,11 +1789,85 @@ volumes:
       - nexus-network
 
   # Streamlit Frontend
+=======
+    volumes:
+      - ./backend:/app
+      - ./uploads:/app/uploads
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      DEBUG: "True"
+      SECRET_KEY: "development-secret-key-change-in-production"
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Celery Worker
+  celery_worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.celery
+    container_name: nexus-celery-worker
+    volumes:
+      - ./backend:/app
+      - ./uploads:/app/uploads
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      SECRET_KEY: "development-secret-key-change-in-production"
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    command: celery -A app.core.celery_app worker --loglevel=info
+
+  # Celery Beat (Scheduler)
+  celery_beat:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.celery
+    container_name: nexus-celery-beat
+    volumes:
+      - ./backend:/app
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      SECRET_KEY: "development-secret-key-change-in-production"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    command: celery -A app.core.celery_app beat --loglevel=info
+
+  # Frontend (Streamlit)
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
   frontend:
     build:
       context: .
       dockerfile: docker/Dockerfile.frontend
     container_name: nexus-frontend
+<<<<<<< HEAD
     environment:
       - BACKEND_URL=http://backend:8000
     ports:
@@ -1771,10 +1880,27 @@ volumes:
     networks:
       - nexus-network
 >>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "8501:8501"
+    environment:
+      API_BASE_URL: http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - nexus-network
+    command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0
+
+volumes:
+  postgres_data:
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
 
 networks:
   nexus-network:
     driver: bridge
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
@@ -1789,3 +1915,5 @@ volumes:
 =======
   redis_data:
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp

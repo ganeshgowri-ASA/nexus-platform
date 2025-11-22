@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # UI Framework
 streamlit==1.28.2
 
@@ -21,3 +22,25 @@ python-dateutil==2.8.2
 
 # Testing
 pytest==7.4.3
+=======
+# NEXUS Platform Frontend Requirements
+# Production-ready Python packages for Streamlit UI
+
+# Streamlit Framework
+streamlit==1.30.0
+
+# HTTP Client
+requests==2.31.0
+
+# Data Processing & Analysis
+pandas==2.1.4
+numpy==1.26.3
+
+# Visualization
+plotly==5.18.0
+matplotlib==3.8.2
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2024.1
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
