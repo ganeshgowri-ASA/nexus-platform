@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """Alembic environment configuration."""
 
 import asyncio
@@ -35,6 +36,43 @@ elif db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
 
 config.set_main_option("sqlalchemy.url", db_url)
+=======
+"""
+Alembic Migration Environment
+"""
+from logging.config import fileConfig
+
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
+
+from alembic import context
+
+from backend.app.core.config import settings
+from backend.app.db.base import Base
+
+# Import all models here to ensure they're registered
+from backend.app.models.attribution import (
+    Channel,
+    Journey,
+    Touchpoint,
+    Conversion,
+    AttributionModel,
+    AttributionResult,
+)
+
+# this is the Alembic Config object
+config = context.config
+
+# Interpret the config file for Python logging.
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
+
+# Set database URL from settings
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+
+# add your model's MetaData object here for 'autogenerate' support
+target_metadata = Base.metadata
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
 
 
 def run_migrations_offline() -> None:
@@ -61,6 +99,7 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
+<<<<<<< HEAD
 def do_run_migrations(connection: Connection) -> None:
     """Run migrations with connection."""
     context.configure(connection=connection, target_metadata=target_metadata)
@@ -72,11 +111,22 @@ def do_run_migrations(connection: Connection) -> None:
 async def run_async_migrations() -> None:
     """Run migrations in async mode."""
     connectable = async_engine_from_config(
+=======
+def run_migrations_online() -> None:
+    """Run migrations in 'online' mode.
+
+    In this scenario we need to create an Engine
+    and associate a connection with the context.
+
+    """
+    connectable = engine_from_config(
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
 
+<<<<<<< HEAD
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
 
@@ -86,6 +136,15 @@ async def run_async_migrations() -> None:
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
     asyncio.run(run_async_migrations())
+=======
+    with connectable.connect() as connection:
+        context.configure(
+            connection=connection, target_metadata=target_metadata
+        )
+
+        with context.begin_transaction():
+            context.run_migrations()
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
 
 
 if context.is_offline_mode():

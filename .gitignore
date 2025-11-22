@@ -209,6 +209,7 @@ __marimo__/
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # NEXUS Platform specific
 <<<<<<< HEAD
 # Data directory with uploaded files
@@ -266,3 +267,27 @@ reports/
 .DS_Store
 Thumbs.db
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+# NEXUS Platform Specific
+# Docker
+docker-compose.override.yml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Logs
+logs/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z

@@ -6,6 +6,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -66,10 +67,13 @@ services:
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
 =======
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
 version: '3.8'
 
 services:
   # PostgreSQL Database
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -448,6 +452,21 @@ volumes:
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U nexus -d nexus_analytics"]
+=======
+  db:
+    image: postgres:15-alpine
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
       interval: 10s
       timeout: 5s
       retries: 5
@@ -455,6 +474,7 @@ volumes:
       - nexus-network
 
   # Redis Cache
+<<<<<<< HEAD
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
   redis:
     image: redis:7-alpine
@@ -501,11 +521,22 @@ networks:
     volumes:
       - redis_data:/data
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -756,10 +787,13 @@ networks:
       - "8086:8086"
     volumes:
       - influxdb_data:/var/lib/influxdb2
+=======
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
     networks:
       - nexus-network
 
   # FastAPI Backend
+<<<<<<< HEAD
   api:
     build:
       context: .
@@ -1577,11 +1611,68 @@ volumes:
 =======
   influxdb_data:
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: nexus-backend
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ENVIRONMENT=production
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - nexus-network
+
+  # Streamlit Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: nexus-frontend
+    environment:
+      - BACKEND_URL=http://backend:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+    command: streamlit run /app/pages/Attribution.py --server.port 8501 --server.address 0.0.0.0
+    networks:
+      - nexus-network
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
 
 networks:
   nexus-network:
     driver: bridge
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
 =======
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+
+volumes:
+  postgres_data:
+  redis_data:
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
