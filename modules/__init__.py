@@ -1,3 +1,1 @@
-"""
-NEXUS Platform modules.
-"""
+"""NEXUS Platform modules."""
