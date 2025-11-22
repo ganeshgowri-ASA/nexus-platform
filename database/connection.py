@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Database connection and session management for NEXUS Platform.
 
@@ -345,27 +346,53 @@ def get_table_names() -> List[str]:
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from config.settings import settings
+=======
+"""Database connection and session management."""
+
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from core.config import settings
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
 
 # Create database engine
 engine = create_engine(
     settings.DATABASE_URL,
+<<<<<<< HEAD
     connect_args={"check_same_thread": False} if "sqlite" in settings.DATABASE_URL else {},
+=======
+    pool_pre_ping=True,
+    pool_size=10,
+    max_overflow=20,
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
     echo=settings.DEBUG
 )
 
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+<<<<<<< HEAD
 def get_db() -> Session:
     """Get database session"""
+=======
+# Create declarative base
+Base = declarative_base()
+
+
+def get_db():
+    """Get database session dependency for FastAPI."""
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
     db = SessionLocal()
     try:
         yield db
     finally:
         db.close()
+<<<<<<< HEAD
 
 def init_db():
     """Initialize database and create all tables"""
     from .models import Base
     Base.metadata.create_all(bind=engine)
 >>>>>>> origin/claude/productivity-suite-ai-01Uq8q3V9EdvDAuMPqDoBxZh
+=======
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97

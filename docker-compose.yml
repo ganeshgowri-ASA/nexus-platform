@@ -4,6 +4,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -60,19 +61,25 @@ services:
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 =======
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
 version: '3.8'
 
 services:
   # PostgreSQL Database
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
 =======
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
   postgres:
     image: postgres:15-alpine
     container_name: nexus-postgres
     environment:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -121,10 +128,16 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: nexus
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+      POSTGRES_DB: nexus_db
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_password
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -204,15 +217,29 @@ services:
     image: redis:7-alpine
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 =======
+=======
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
   # Redis
   redis:
     image: redis:7-alpine
     container_name: nexus-redis
+<<<<<<< HEAD
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -438,11 +465,14 @@ networks:
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
 =======
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -458,10 +488,16 @@ networks:
 =======
 
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+    networks:
+      - nexus-network
+
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
   # FastAPI Application
   api:
     build:
       context: .
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       dockerfile: Dockerfile
@@ -535,11 +571,25 @@ networks:
     volumes:
       - .:/app
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+      target: production
+    container_name: nexus-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     volumes:
@@ -1059,11 +1109,34 @@ networks:
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
     volumes:
       - .:/app
+=======
+    volumes:
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Celery Worker
+  celery-worker:
+    build:
+      context: .
+      target: celery-worker
+    container_name: nexus-celery-worker
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 
@@ -1087,11 +1160,65 @@ networks:
     volumes:
       - ./modules:/app/modules
     command: celery -A modules.scheduler.tasks.celery_app beat --loglevel=info
+=======
+    volumes:
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Celery Beat (Scheduler)
+  celery-beat:
+    build:
+      context: .
+      target: celery-beat
+    container_name: nexus-celery-beat
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Flower (Celery Monitoring)
+  flower:
+    build:
+      context: .
+      target: base
+    container_name: nexus-flower
+    command: celery -A tasks.celery_app flower --port=5555
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      - redis
+      - celery-worker
+    networks:
+      - nexus-network
+    restart: unless-stopped
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
 
   # Streamlit UI
   streamlit:
     build:
       context: .
+<<<<<<< HEAD
       dockerfile: Dockerfile.streamlit
     container_name: nexus-streamlit-ui
 =======
@@ -1259,3 +1386,28 @@ networks:
   default:
     name: nexus-network
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+      target: streamlit
+    container_name: nexus-streamlit
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    depends_on:
+      - api
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  nexus-network:
+    driver: bridge
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97

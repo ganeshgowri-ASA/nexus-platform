@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 <<<<<<< HEAD
 NEXUS Platform Database Package.
@@ -160,3 +161,10 @@ from .models import Base
 
 __all__ = ['engine', 'SessionLocal', 'get_db', 'init_db', 'Base']
 >>>>>>> origin/claude/productivity-suite-ai-01Uq8q3V9EdvDAuMPqDoBxZh
+=======
+"""Database module for NEXUS Platform."""
+
+from .connection import engine, SessionLocal, get_db, Base
+
+__all__ = ["engine", "SessionLocal", "get_db", "Base"]
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
