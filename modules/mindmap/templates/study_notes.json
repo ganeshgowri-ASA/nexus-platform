@@ -1,0 +1,54 @@
+{
+  "name": "Study Notes Template",
+  "description": "Template for organizing study materials",
+  "structure": {
+    "root": "Subject Name",
+    "children": [
+      {
+        "text": "Key Concepts",
+        "children": [
+          {"text": "Concept 1"},
+          {"text": "Concept 2"},
+          {"text": "Concept 3"}
+        ]
+      },
+      {
+        "text": "Definitions",
+        "children": [
+          {"text": "Term 1"},
+          {"text": "Term 2"}
+        ]
+      },
+      {
+        "text": "Examples",
+        "children": [
+          {"text": "Real-world Applications"},
+          {"text": "Case Studies"}
+        ]
+      },
+      {
+        "text": "Practice Problems",
+        "children": [
+          {"text": "Easy"},
+          {"text": "Medium"},
+          {"text": "Hard"}
+        ]
+      },
+      {
+        "text": "Resources",
+        "children": [
+          {"text": "Textbooks"},
+          {"text": "Online Materials"},
+          {"text": "Video Tutorials"}
+        ]
+      },
+      {
+        "text": "Review Questions",
+        "children": [
+          {"text": "Chapter 1 Questions"},
+          {"text": "Chapter 2 Questions"}
+        ]
+      }
+    ]
+  }
+}

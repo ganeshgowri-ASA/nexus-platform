@@ -1,0 +1,41 @@
+{
+  "name": "Meeting Agenda Template",
+  "description": "Template for structuring meeting agendas",
+  "structure": {
+    "root": "Meeting Topic",
+    "children": [
+      {
+        "text": "Opening",
+        "children": [
+          {"text": "Welcome & Introductions"},
+          {"text": "Meeting Objectives"},
+          {"text": "Time Allocation"}
+        ]
+      },
+      {
+        "text": "Agenda Items",
+        "children": [
+          {"text": "Topic 1"},
+          {"text": "Topic 2"},
+          {"text": "Topic 3"}
+        ]
+      },
+      {
+        "text": "Discussion Points",
+        "children": [
+          {"text": "Key Questions"},
+          {"text": "Decision Points"},
+          {"text": "Action Items"}
+        ]
+      },
+      {
+        "text": "Next Steps",
+        "children": [
+          {"text": "Assigned Tasks"},
+          {"text": "Follow-up Items"},
+          {"text": "Next Meeting Date"}
+        ]
+      }
+    ]
+  }
+}
