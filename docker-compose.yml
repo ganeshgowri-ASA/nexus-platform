@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -54,10 +55,13 @@ services:
   # ============================================================================
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
 =======
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 version: '3.8'
 
 services:
   # PostgreSQL Database
+<<<<<<< HEAD
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
   postgres:
     image: postgres:15-alpine
@@ -97,10 +101,19 @@ services:
       POSTGRES_USER: nexus
       POSTGRES_PASSWORD: nexus_dev_password
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nexus_orchestration
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -122,10 +135,15 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nexus}"]
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
       interval: 10s
       timeout: 5s
       retries: 5
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   # Redis Cache
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
@@ -162,10 +180,16 @@ services:
   redis:
     image: redis:7-alpine
     container_name: nexus-redis
+=======
+  # Redis
+  redis:
+    image: redis:7-alpine
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -387,11 +411,14 @@ networks:
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
 =======
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -403,10 +430,14 @@ networks:
       retries: 5
 
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
   # FastAPI Application
   api:
     build:
       context: .
+<<<<<<< HEAD
 <<<<<<< HEAD
       dockerfile: Dockerfile
     container_name: nexus-api
@@ -465,11 +496,26 @@ networks:
     ports:
       - "8000:8000"
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+      dockerfile: Dockerfile
+    command: uvicorn modules.orchestration.api.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/nexus_orchestration
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      TEMPORAL_HOST: temporal:7233
+    volumes:
+      - .:/app
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+<<<<<<< HEAD
 <<<<<<< HEAD
     volumes:
 <<<<<<< HEAD
@@ -900,11 +946,14 @@ networks:
 =======
       - ./modules:/app/modules
     command: uvicorn modules.scheduler.main:app --host 0.0.0.0 --port 8000 --reload
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 
   # Celery Worker
   celery_worker:
     build:
       context: .
+<<<<<<< HEAD
       dockerfile: Dockerfile.api
     container_name: nexus-celery-worker
     environment:
@@ -920,11 +969,29 @@ networks:
     volumes:
       - ./modules:/app/modules
     command: celery -A modules.scheduler.tasks.celery_app worker --loglevel=info
+=======
+      dockerfile: Dockerfile
+    command: celery -A modules.orchestration.workers.celery_app worker --loglevel=info --concurrency=4
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/nexus_orchestration
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      TEMPORAL_HOST: temporal:7233
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 
   # Celery Beat (Scheduler)
   celery_beat:
     build:
       context: .
+<<<<<<< HEAD
       dockerfile: Dockerfile.api
     container_name: nexus-celery-beat
     environment:
@@ -947,19 +1014,92 @@ networks:
       context: .
       dockerfile: Dockerfile.streamlit
     container_name: nexus-streamlit-ui
+=======
+      dockerfile: Dockerfile
+    command: celery -A modules.orchestration.workers.celery_app beat --loglevel=info
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/nexus_orchestration
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    volumes:
+      - .:/app
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # Flower (Celery Monitoring)
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A modules.orchestration.workers.celery_app flower --port=5555
+    ports:
+      - "5555:5555"
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # Streamlit UI
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: streamlit run modules/orchestration/ui/app.py --server.port=8501 --server.address=0.0.0.0
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
     ports:
       - "8501:8501"
     environment:
       API_BASE_URL: http://api:8000/api/v1
+<<<<<<< HEAD
     depends_on:
       - api
     volumes:
       - ./modules:/app/modules
     command: streamlit run modules/scheduler/ui/app.py --server.port 8501 --server.address 0.0.0.0
+=======
+    volumes:
+      - .:/app
+    depends_on:
+      - api
+
+  # Temporal Server
+  temporal:
+    image: temporalio/auto-setup:latest
+    ports:
+      - "7233:7233"
+    environment:
+      - DB=postgresql
+      - DB_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PWD=postgres
+      - POSTGRES_SEEDS=postgres
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Temporal Web UI
+  temporal-ui:
+    image: temporalio/ui:latest
+    ports:
+      - "8088:8080"
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_CORS_ORIGINS=http://localhost:3000
+    depends_on:
+      - temporal
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 
 volumes:
   postgres_data:
   redis_data:
+<<<<<<< HEAD
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
 =======
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a

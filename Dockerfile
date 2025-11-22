@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM python:3.11-slim
 
 <<<<<<< HEAD
@@ -26,10 +27,13 @@ FROM python:3.11-slim as builder
 # Set working directory
 WORKDIR /build
 =======
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
+<<<<<<< HEAD
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
 
 # Install system dependencies
@@ -38,12 +42,20 @@ RUN apt-get update && apt-get install -y \
     curl \
 <<<<<<< HEAD
     git \
+=======
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    postgresql-client \
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements
 COPY requirements.txt .
 
 # Install Python dependencies
+<<<<<<< HEAD
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --user -r requirements.txt
 
@@ -98,11 +110,14 @@ COPY requirements.txt .
 >>>>>>> origin/claude/elasticsearch-search-implementation-013e5Tg92YLzoP4Dme7tcjZR
 =======
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 # Create necessary directories
@@ -151,10 +166,13 @@ EXPOSE 8501 5555
 # Default command (can be overridden in docker-compose)
 CMD ["streamlit", "run", "app.py"]
 =======
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 # Create non-root user
 RUN useradd -m -u 1000 nexus && chown -R nexus:nexus /app
 USER nexus
 
+<<<<<<< HEAD
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD python -c "import asyncio; from search.client import es_client; asyncio.run(es_client.ping())"
@@ -291,3 +309,10 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
 # Default command (can be overridden in docker-compose)
 CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+# Expose ports
+EXPOSE 8000 8501
+
+# Default command
+CMD ["uvicorn", "modules.orchestration.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
