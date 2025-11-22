@@ -1,5 +1,6 @@
 [theme]
 primaryColor = "#667eea"
+<<<<<<< HEAD
 backgroundColor = "#FFFFFF"
 secondaryBackgroundColor = "#F0F2F6"
 textColor = "#262730"
@@ -13,3 +14,33 @@ enableXsrfProtection = true
 
 [browser]
 gatherUsageStats = false
+=======
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f8f9fa"
+textColor = "#212529"
+font = "sans serif"
+
+[server]
+port = 8501
+address = "0.0.0.0"
+headless = true
+enableCORS = true
+enableXsrfProtection = true
+maxUploadSize = 200
+
+[browser]
+gatherUsageStats = false
+serverAddress = "localhost"
+serverPort = 8501
+
+[runner]
+magicEnabled = true
+fastReruns = true
+
+[client]
+showErrorDetails = true
+toolbarMode = "minimal"
+
+[logger]
+level = "info"
+>>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai

@@ -1,9 +1,20 @@
+<<<<<<< HEAD
 # Python
 __pycache__/
+=======
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python
+__pycache__
+>>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
 *.py[cod]
 *$py.class
 *.so
 .Python
+<<<<<<< HEAD
 env/
 venv/
 ENV/
@@ -12,19 +23,82 @@ dist/
 build/
 
 # IDE
+=======
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+>>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+<<<<<<< HEAD
 
 # Git
 .git/
 .gitignore
+=======
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+*.cover
+.cache
+nosetests.xml
+coverage.xml
+*.log
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Storage
+storage/
+temp/
+>>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
 
 # Environment
 .env
 .env.local
+<<<<<<< HEAD
 
 # Data directories
 uploads/*
@@ -46,3 +120,28 @@ docker-compose.yml
 # OS
 .DS_Store
 Thumbs.db
+=======
+.env.*.local
+
+# Documentation
+docs/_build/
+*.md
+!README.md
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Misc
+*.bak
+*.tmp
+*.temp
+.cache/
+tmp/
+>>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
