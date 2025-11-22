@@ -1,0 +1,12 @@
+# NEXUS Platform - Python Dependencies
+
+# Database
+sqlalchemy>=2.0.0,<3.0.0
+psycopg2-binary>=2.9.0,<3.0.0  # PostgreSQL adapter
+alembic>=1.12.0,<2.0.0  # Database migrations
+
+# Security
+bcrypt>=4.0.0,<5.0.0  # Password hashing
+
+# Optional: For better JSON support
+python-dateutil>=2.8.0,<3.0.0
