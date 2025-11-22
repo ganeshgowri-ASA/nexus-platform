@@ -14,6 +14,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -84,10 +85,13 @@ services:
 >>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
 =======
 >>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+=======
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
 version: '3.8'
 
 services:
   # PostgreSQL Database
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -201,10 +205,20 @@ services:
       POSTGRES_USER: nexus_user
       POSTGRES_PASSWORD: nexus_pass
 >>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+=======
+  postgres:
+    image: postgres:15
+    container_name: nexus_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nexus_platform
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -240,10 +254,15 @@ services:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
       interval: 10s
       timeout: 5s
       retries: 5
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -679,10 +698,17 @@ networks:
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
 =======
 >>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+=======
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: nexus_redis
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
@@ -711,11 +737,14 @@ networks:
 >>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
 =======
 >>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+=======
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2266,11 +2295,29 @@ volumes:
       - ./uploads:/app/uploads
       - ./logs:/app/logs
 >>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+=======
+
+  # Image Recognition API
+  image_recognition_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_image_api
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    ports:
+      - "8000:8000"
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+<<<<<<< HEAD
     networks:
       - nexus-network
 <<<<<<< HEAD
@@ -2487,10 +2534,86 @@ networks:
     build: .
     container_name: nexus-flower
     command: celery -A celery_app flower --port=5555
+=======
+    volumes:
+      - ./modules/image_recognition:/app/modules/image_recognition
+      - uploads:/tmp/nexus_uploads
+    command: uvicorn modules.image_recognition.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Testing API
+  testing_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.testing
+    container_name: nexus_testing_api
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./modules/testing:/app/modules/testing
+    command: uvicorn modules.testing.api.main:app --host 0.0.0.0 --port 8001 --reload
+
+  # Celery Worker for Image Recognition
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_celery_worker
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./modules/image_recognition:/app/modules/image_recognition
+    command: celery -A modules.image_recognition.tasks.celery_tasks worker --loglevel=info
+
+  # Celery Beat for Scheduled Tasks
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_celery_beat
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./modules/image_recognition:/app/modules/image_recognition
+    command: celery -A modules.image_recognition.tasks.celery_tasks beat --loglevel=info
+
+  # Flower - Celery Monitoring
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_flower
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
     ports:
       - "5555:5555"
     depends_on:
       - redis
+<<<<<<< HEAD
       - celery_worker
     env_file:
       - .env
@@ -2501,10 +2624,46 @@ networks:
 >>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 =======
 >>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+=======
+    command: celery -A modules.image_recognition.tasks.celery_tasks flower --port=5555
+
+  # Image Recognition Streamlit UI
+  image_recognition_ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: nexus_image_ui
+    environment:
+      - IMAGE_API_URL=http://image_recognition_api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - image_recognition_api
+    volumes:
+      - ./modules/image_recognition/ui:/app/ui
+    command: streamlit run ui/streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+
+  # Testing Streamlit UI
+  testing_ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: nexus_testing_ui
+    environment:
+      - TESTING_API_URL=http://testing_api:8001
+    ports:
+      - "8502:8502"
+    depends_on:
+      - testing_api
+    volumes:
+      - ./modules/testing/ui:/app/ui
+    command: streamlit run ui/streamlit_app.py --server.port=8502 --server.address=0.0.0.0
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
 
 volumes:
   postgres_data:
   redis_data:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
@@ -2523,3 +2682,6 @@ volumes:
 >>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
 =======
 >>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+=======
+  uploads:
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
