@@ -1,4 +1,5 @@
 """
+<<<<<<< HEAD
 Celery application for asynchronous tasks.
 
 Handles:
@@ -25,11 +26,27 @@ from modules.content_calendar import (
 # Initialize Celery
 celery_app = Celery(
     "nexus_content_calendar",
+=======
+Celery application configuration for NEXUS Platform.
+
+This module sets up Celery for async task processing.
+"""
+from celery import Celery
+from config.settings import settings
+
+# Create Celery app
+celery_app = Celery(
+    "nexus",
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
     broker=settings.celery_broker_url,
     backend=settings.celery_result_backend,
 )
 
+<<<<<<< HEAD
 # Celery configuration
+=======
+# Configure Celery
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
 celery_app.conf.update(
     task_serializer="json",
     accept_content=["json"],
@@ -37,6 +54,7 @@ celery_app.conf.update(
     timezone="UTC",
     enable_utc=True,
     task_track_started=True,
+<<<<<<< HEAD
     task_time_limit=30 * 60,  # 30 minutes
 )
 
@@ -353,3 +371,13 @@ celery_app.conf.beat_schedule = {
 
 if __name__ == "__main__":
     celery_app.start()
+=======
+    task_time_limit=3600,  # 1 hour
+    task_soft_time_limit=3000,  # 50 minutes
+    worker_prefetch_multiplier=4,
+    worker_max_tasks_per_child=1000,
+)
+
+# Auto-discover tasks
+celery_app.autodiscover_tasks(["src.tasks.marketing"])
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
