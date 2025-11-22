@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -51,10 +52,17 @@ services:
   # PostgreSQL Database Service
   # ============================================================================
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
   postgres:
     image: postgres:15-alpine
     container_name: nexus-postgres
     environment:
+<<<<<<< HEAD
 <<<<<<< HEAD
       POSTGRES_USER: nexus
       POSTGRES_PASSWORD: password
@@ -72,10 +80,16 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nexus_password}
       POSTGRES_DB: ${POSTGRES_DB:-nexus_db}
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus
+      POSTGRES_DB: nexus_scheduler
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+<<<<<<< HEAD
 <<<<<<< HEAD
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U nexus"]
@@ -109,16 +123,23 @@ services:
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
 =======
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+=======
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U nexus"]
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
     networks:
       - nexus-network
 
   # Redis Cache & Message Broker
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+
+  # Redis
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
   redis:
     image: redis:7-alpine
     container_name: nexus-redis
@@ -126,6 +147,7 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -350,10 +372,19 @@ networks:
       retries: 5
 <<<<<<< HEAD
 
+=======
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
   # FastAPI Application
   api:
     build:
       context: .
+<<<<<<< HEAD
       dockerfile: Dockerfile
     container_name: nexus-api
     ports:
@@ -387,12 +418,26 @@ networks:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+      dockerfile: Dockerfile.api
+    container_name: nexus-scheduler-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://nexus:nexus@postgres:5432/nexus_scheduler
+      DATABASE_URL_SYNC: postgresql://nexus:nexus@postgres:5432/nexus_scheduler
+      REDIS_URL: redis://redis:6379/0
+      REDIS_HOST: redis
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
     volumes:
+<<<<<<< HEAD
 <<<<<<< HEAD
       - ./logs:/app/logs
     command: python -m modules.ab_testing.api.main
@@ -734,3 +779,67 @@ networks:
   nexus-network:
     driver: bridge
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+      - ./modules:/app/modules
+    command: uvicorn modules.scheduler.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Celery Worker
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: nexus-celery-worker
+    environment:
+      DATABASE_URL: postgresql+asyncpg://nexus:nexus@postgres:5432/nexus_scheduler
+      DATABASE_URL_SYNC: postgresql://nexus:nexus@postgres:5432/nexus_scheduler
+      REDIS_URL: redis://redis:6379/0
+      REDIS_HOST: redis
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./modules:/app/modules
+    command: celery -A modules.scheduler.tasks.celery_app worker --loglevel=info
+
+  # Celery Beat (Scheduler)
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: nexus-celery-beat
+    environment:
+      DATABASE_URL: postgresql+asyncpg://nexus:nexus@postgres:5432/nexus_scheduler
+      DATABASE_URL_SYNC: postgresql://nexus:nexus@postgres:5432/nexus_scheduler
+      REDIS_URL: redis://redis:6379/0
+      REDIS_HOST: redis
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./modules:/app/modules
+    command: celery -A modules.scheduler.tasks.celery_app beat --loglevel=info
+
+  # Streamlit UI
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: nexus-streamlit-ui
+    ports:
+      - "8501:8501"
+    environment:
+      API_BASE_URL: http://api:8000/api/v1
+    depends_on:
+      - api
+    volumes:
+      - ./modules:/app/modules
+    command: streamlit run modules/scheduler/ui/app.py --server.port 8501 --server.address 0.0.0.0
+
+volumes:
+  postgres_data:
+  redis_data:
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
