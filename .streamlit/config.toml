@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 [theme]
 primaryColor = "#667eea"
-<<<<<<< HEAD
-backgroundColor = "#FFFFFF"
-secondaryBackgroundColor = "#F0F2F6"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f0f2f6"
 textColor = "#262730"
 font = "sans serif"
 
@@ -16,117 +13,13 @@ enableXsrfProtection = true
 
 [browser]
 gatherUsageStats = false
-=======
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f8f9fa"
-textColor = "#212529"
-font = "sans serif"
-
-[server]
-port = 8501
-address = "0.0.0.0"
-headless = true
-enableCORS = true
-=======
-# NEXUS Platform Streamlit Configuration
-
-[server]
-# Server settings
-port = 8501
-address = "0.0.0.0"
-headless = true
-runOnSave = true
-enableCORS = false
->>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
-enableXsrfProtection = true
-maxUploadSize = 200
-
-[browser]
-<<<<<<< HEAD
-=======
-# Browser settings
->>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
-gatherUsageStats = false
 serverAddress = "localhost"
-serverPort = 8501
-
-<<<<<<< HEAD
-[runner]
-magicEnabled = true
-fastReruns = true
-
-[client]
-showErrorDetails = true
-toolbarMode = "minimal"
-
-[logger]
-level = "info"
->>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
-=======
-[client]
-# Client settings
-showErrorDetails = true
-toolbarMode = "minimal"
-
-[theme]
-# Custom theme matching NEXUS brand
-primaryColor = "#6366f1"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f8f9fa"
-textColor = "#1f2937"
-font = "sans serif"
-
-# Base theme (can be "light" or "dark")
-base = "light"
 
 [runner]
-# Script runner settings
 magicEnabled = true
 installTracer = false
 fixMatplotlib = true
-postScriptGC = true
-fastReruns = true
 
-[logger]
-# Logging settings
-level = "info"
-messageFormat = "%(asctime)s %(levelname)s: %(message)s"
-
-[deprecation]
-# Deprecation warnings
-showPyplotGlobalUse = false
-
-[mapbox]
-# Mapbox token (if using map features)
-# token = "your-mapbox-token-here"
-
-[global]
-# Global settings
-developmentMode = false
-dataFrameSerialization = "legacy"
-showWarningOnDirectExecution = true
-
-# Performance settings
-maxCachedMessageAge = 2.0
-minCachedMessageSize = 100000
->>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
-=======
-[theme]
-primaryColor="#4F46E5"
-backgroundColor="#FFFFFF"
-secondaryBackgroundColor="#F3F4F6"
-textColor="#1F2937"
-font="sans serif"
-
-[server]
-maxUploadSize=50
-enableCORS=false
-enableXsrfProtection=true
-
-[browser]
-gatherUsageStats=false
-
-[runner]
-magicEnabled=true
-fastReruns=true
->>>>>>> origin/claude/word-editor-module-01PPyUEeNUgZmU4swtfxgoCB
+[client]
+showErrorDetails = true
+toolbarMode = "auto"
