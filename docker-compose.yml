@@ -1,0 +1,164 @@
+version: '3.8'
+
+services:
+  # Redis - Message Broker and Result Backend
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Celery Worker - Default Queue
+  celery_worker:
+    build: .
+    container_name: nexus-celery-worker
+    command: celery -A config.celery_config worker --loglevel=info -Q default_queue
+    volumes:
+      - ./:/app
+      - ./uploads:/app/uploads
+      - ./temp:/app/temp
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Celery Worker - Email Queue
+  celery_worker_email:
+    build: .
+    container_name: nexus-celery-worker-email
+    command: celery -A config.celery_config worker --loglevel=info -Q email_queue
+    volumes:
+      - ./:/app
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Celery Worker - File Processing Queue
+  celery_worker_files:
+    build: .
+    container_name: nexus-celery-worker-files
+    command: celery -A config.celery_config worker --loglevel=info -Q file_processing_queue
+    volumes:
+      - ./:/app
+      - ./uploads:/app/uploads
+      - ./temp:/app/temp
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Celery Worker - AI Queue
+  celery_worker_ai:
+    build: .
+    container_name: nexus-celery-worker-ai
+    command: celery -A config.celery_config worker --loglevel=info -Q ai_queue --concurrency=2
+    volumes:
+      - ./:/app
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Celery Worker - Reports Queue
+  celery_worker_reports:
+    build: .
+    container_name: nexus-celery-worker-reports
+    command: celery -A config.celery_config worker --loglevel=info -Q reports_queue
+    volumes:
+      - ./:/app
+      - ./temp:/app/temp
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Celery Beat - Periodic Task Scheduler
+  celery_beat:
+    build: .
+    container_name: nexus-celery-beat
+    command: celery -A config.celery_config beat --loglevel=info
+    volumes:
+      - ./:/app
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Flower - Celery Monitoring Dashboard
+  flower:
+    build: .
+    container_name: nexus-flower
+    command: celery -A config.celery_config flower --port=5555
+    ports:
+      - "5555:5555"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - celery_worker
+    restart: unless-stopped
+
+  # Streamlit App
+  streamlit:
+    build: .
+    container_name: nexus-streamlit
+    command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/app
+      - ./uploads:/app/uploads
+      - ./temp:/app/temp
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+volumes:
+  redis_data:
