@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 <<<<<<< HEAD
 NEXUS Platform Database Package.
@@ -153,3 +154,9 @@ __version__ = "1.0.0"
     "drop_db",
 ]
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+from .connection import engine, SessionLocal, get_db, init_db
+from .models import Base
+
+__all__ = ['engine', 'SessionLocal', 'get_db', 'init_db', 'Base']
+>>>>>>> origin/claude/productivity-suite-ai-01Uq8q3V9EdvDAuMPqDoBxZh
