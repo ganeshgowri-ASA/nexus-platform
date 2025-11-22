@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Python
 __pycache__/
 =======
@@ -30,6 +31,10 @@ __pycache__/
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 =======
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+=======
+# Python
+__pycache__/
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
 *.py[cod]
 *$py.class
 *.so
@@ -38,13 +43,17 @@ __pycache__/
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 env/
 venv/
 ENV/
+=======
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
 *.egg-info/
 dist/
 build/
 
+<<<<<<< HEAD
 # IDE
 =======
 =======
@@ -102,12 +111,25 @@ ENV/
 dist/
 build/
 *.egg-info/
+=======
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
 
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
 
+<<<<<<< HEAD
 # IDEs
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
 .vscode/
@@ -127,10 +149,16 @@ htmlcov/
 Thumbs.db
 <<<<<<< HEAD
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+# Environment
+.env
+.env.local
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
 
 # Git
 .git/
 .gitignore
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 .DS_Store
@@ -301,3 +329,15 @@ docs/_build/
 .github/
 .gitlab-ci.yml
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+=======
+
+# Documentation
+*.md
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
