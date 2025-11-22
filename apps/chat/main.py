@@ -1,17 +1,35 @@
 """Chat / Real-time Messaging Application"""
 import streamlit as st
 from datetime import datetime
-from pathlib import Path
-import sys
-import json
-import emoji as emoji_lib
-sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from database.connection import SessionLocal, init_db
-from database.models import ChatRoom, ChatMessage
-from config.settings import settings
-from config.constants import CHAT_ROOM_TYPES
-from utils.formatters import format_relative_time
+# Lazy imports
+SessionLocal = None
+ChatRoom = None
+ChatMessage = None
+settings = None
+CHAT_ROOM_TYPES = None
+format_relative_time = None
+
+
+def _lazy_imports():
+    """Import all dependencies lazily"""
+    global SessionLocal, ChatRoom, ChatMessage, settings, CHAT_ROOM_TYPES, format_relative_time
+
+    from database import init_database, get_session
+    from database.models import ChatRoom as _ChatRoom, ChatMessage as _ChatMessage
+    from config.settings import settings as _settings
+    from config.constants import CHAT_ROOM_TYPES as _CHAT_ROOM_TYPES
+    from utils.formatters import format_relative_time as _format_relative_time
+
+    SessionLocal = get_session
+    ChatRoom = _ChatRoom
+    ChatMessage = _ChatMessage
+    settings = _settings
+    CHAT_ROOM_TYPES = _CHAT_ROOM_TYPES
+    format_relative_time = _format_relative_time
+
+    init_database()
+    return get_session
 
 def initialize_session_state():
     """Initialize session state variables"""
@@ -325,24 +343,31 @@ def main():
         layout="wide"
     )
 
-    # Initialize database
-    init_db()
+    try:
+        # Lazy import all dependencies
+        get_session = _lazy_imports()
 
-    # Initialize session state
-    initialize_session_state()
+        # Initialize session state
+        initialize_session_state()
 
-    # Render sidebar
-    render_sidebar()
+        # Render sidebar
+        render_sidebar()
 
-    # Render main content
-    db = SessionLocal()
+        # Render main content
+        db = get_session()
 
-    if st.session_state.current_room:
-        render_chat_room(db, st.session_state.current_room)
-    else:
-        render_welcome()
+        if st.session_state.current_room:
+            render_chat_room(db, st.session_state.current_room)
+        else:
+            render_welcome()
 
-    db.close()
+        db.close()
+
+    except Exception as e:
+        st.error(f"Error in Chat module: {str(e)}")
+        import traceback
+        st.code(traceback.format_exc())
+
 
 if __name__ == "__main__":
     main()

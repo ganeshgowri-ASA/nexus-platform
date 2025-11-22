@@ -1,19 +1,42 @@
 """Calendar Application with Day/Week/Month views, Events, Recurring, Reminders"""
 import streamlit as st
 from datetime import datetime, timedelta
-from pathlib import Path
-import sys
 import calendar as cal_module
-import pandas as pd
-sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from database.connection import SessionLocal, init_db
-from database.models import CalendarEvent
-from ai.claude_client import ClaudeClient
-from config.settings import settings
-from config.constants import CALENDAR_EVENT_TYPES, RECURRENCE_PATTERNS
-from utils.exporters import export_to_ics, export_to_pdf
-from utils.formatters import format_date, format_duration
+# Lazy imports
+pd = None
+SessionLocal = None
+CalendarEvent = None
+settings = None
+CALENDAR_EVENT_TYPES = None
+RECURRENCE_PATTERNS = None
+format_date = None
+format_duration = None
+
+
+def _lazy_imports():
+    """Import all dependencies lazily"""
+    global pd, SessionLocal, CalendarEvent, settings
+    global CALENDAR_EVENT_TYPES, RECURRENCE_PATTERNS, format_date, format_duration
+
+    import pandas as _pd
+    from database import init_database, get_session
+    from database.models import CalendarEvent as _CalendarEvent
+    from config.settings import settings as _settings
+    from config.constants import CALENDAR_EVENT_TYPES as _CALENDAR_EVENT_TYPES, RECURRENCE_PATTERNS as _RECURRENCE_PATTERNS
+    from utils.formatters import format_date as _format_date, format_duration as _format_duration
+
+    pd = _pd
+    SessionLocal = get_session
+    CalendarEvent = _CalendarEvent
+    settings = _settings
+    CALENDAR_EVENT_TYPES = _CALENDAR_EVENT_TYPES
+    RECURRENCE_PATTERNS = _RECURRENCE_PATTERNS
+    format_date = _format_date
+    format_duration = _format_duration
+
+    init_database()
+    return get_session
 
 def initialize_session_state():
     """Initialize session state variables"""
@@ -437,39 +460,46 @@ def main():
         layout="wide"
     )
 
-    # Initialize database
-    init_db()
+    try:
+        # Lazy import all dependencies
+        get_session = _lazy_imports()
 
-    # Initialize session state
-    initialize_session_state()
+        # Initialize session state
+        initialize_session_state()
 
-    # Render sidebar
-    render_sidebar()
+        # Render sidebar
+        render_sidebar()
 
-    # Render main content
-    st.title("📅 Calendar")
+        # Render main content
+        st.title("📅 Calendar")
 
-    db = SessionLocal()
+        db = get_session()
 
-    # Show event details if selected
-    if st.session_state.selected_event:
-        render_event_details(db, st.session_state.selected_event)
-    else:
-        # Render view based on mode
-        if st.session_state.view_mode == 'day':
-            render_day_view(db)
-        elif st.session_state.view_mode == 'week':
-            render_week_view(db)
+        # Show event details if selected
+        if st.session_state.selected_event:
+            render_event_details(db, st.session_state.selected_event)
         else:
-            render_month_view(db)
+            # Render view based on mode
+            if st.session_state.view_mode == 'day':
+                render_day_view(db)
+            elif st.session_state.view_mode == 'week':
+                render_week_view(db)
+            else:
+                render_month_view(db)
 
-        st.divider()
+            st.divider()
 
-        # Add event section
-        with st.expander("➕ Add New Event"):
-            render_add_event(db)
+            # Add event section
+            with st.expander("➕ Add New Event"):
+                render_add_event(db)
 
-    db.close()
+        db.close()
+
+    except Exception as e:
+        st.error(f"Error in Calendar module: {str(e)}")
+        import traceback
+        st.code(traceback.format_exc())
+
 
 if __name__ == "__main__":
     main()

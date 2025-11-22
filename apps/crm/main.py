@@ -1,20 +1,49 @@
 """CRM Application with Contacts, Deals, Pipeline, Email Integration"""
 import streamlit as st
 from datetime import datetime, timedelta
-from pathlib import Path
-import sys
-import plotly.express as px
-import pandas as pd
-sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from database.connection import SessionLocal, init_db
-from database.models import CRMContact, CRMDeal, CRMActivity
-from ai.claude_client import ClaudeClient
-from config.settings import settings
-from config.constants import CRM_DEAL_STAGES, CRM_CONTACT_TYPES
-from utils.exporters import export_to_xlsx, export_to_pdf
-from utils.formatters import format_currency, format_date, format_percentage
-from utils.validators import validate_email, validate_phone
+# Lazy imports - will be imported inside main()
+px = None
+pd = None
+SessionLocal = None
+CRMContact = None
+CRMDeal = None
+CRMActivity = None
+ClaudeClient = None
+settings = None
+CRM_DEAL_STAGES = None
+CRM_CONTACT_TYPES = None
+
+
+def _lazy_imports():
+    """Import all dependencies lazily to avoid circular imports"""
+    global px, pd, SessionLocal, CRMContact, CRMDeal, CRMActivity
+    global ClaudeClient, settings, CRM_DEAL_STAGES, CRM_CONTACT_TYPES
+    global format_currency, format_date, format_percentage
+
+    import plotly.express as _px
+    import pandas as _pd
+    from database import init_database, get_session
+    from database.models import CRMContact as _CRMContact, CRMDeal as _CRMDeal, CRMActivity as _CRMActivity
+    from config.settings import settings as _settings
+    from config.constants import CRM_DEAL_STAGES as _CRM_DEAL_STAGES, CRM_CONTACT_TYPES as _CRM_CONTACT_TYPES
+    from utils.formatters import format_currency as _format_currency, format_date as _format_date, format_percentage as _format_percentage
+
+    px = _px
+    pd = _pd
+    SessionLocal = get_session
+    CRMContact = _CRMContact
+    CRMDeal = _CRMDeal
+    CRMActivity = _CRMActivity
+    settings = _settings
+    CRM_DEAL_STAGES = _CRM_DEAL_STAGES
+    CRM_CONTACT_TYPES = _CRM_CONTACT_TYPES
+    format_currency = _format_currency
+    format_date = _format_date
+    format_percentage = _format_percentage
+
+    init_database()
+    return get_session
 
 def initialize_session_state():
     """Initialize session state variables"""
@@ -408,67 +437,74 @@ def main():
         layout="wide"
     )
 
-    # Initialize database
-    init_db()
+    try:
+        # Lazy import all dependencies
+        get_session = _lazy_imports()
 
-    # Initialize session state
-    initialize_session_state()
+        # Initialize session state
+        initialize_session_state()
 
-    # Render sidebar
-    render_sidebar()
+        # Render sidebar
+        render_sidebar()
 
-    # Render main content
-    st.title("💼 Customer Relationship Management")
+        # Render main content
+        st.title("💼 Customer Relationship Management")
 
-    db = SessionLocal()
+        db = get_session()
 
-    if st.session_state.view_mode == 'contacts':
-        render_contacts_view(db)
-    elif st.session_state.view_mode == 'contact_view' and st.session_state.current_contact:
-        render_contact_detail(db, st.session_state.current_contact)
-    elif st.session_state.view_mode == 'pipeline':
-        render_pipeline_view(db)
-    elif st.session_state.view_mode == 'deals':
-        render_deals_list(db)
-    elif st.session_state.view_mode == 'contact_edit':
-        # New contact form
-        st.subheader("➕ Add New Contact")
+        if st.session_state.view_mode == 'contacts':
+            render_contacts_view(db)
+        elif st.session_state.view_mode == 'contact_view' and st.session_state.current_contact:
+            render_contact_detail(db, st.session_state.current_contact)
+        elif st.session_state.view_mode == 'pipeline':
+            render_pipeline_view(db)
+        elif st.session_state.view_mode == 'deals':
+            render_deals_list(db)
+        elif st.session_state.view_mode == 'contact_edit':
+            # New contact form
+            st.subheader("➕ Add New Contact")
 
-        col1, col2 = st.columns(2)
+            col1, col2 = st.columns(2)
 
-        with col1:
-            first_name = st.text_input("First Name*")
-            last_name = st.text_input("Last Name*")
-            email = st.text_input("Email")
-            phone = st.text_input("Phone")
+            with col1:
+                first_name = st.text_input("First Name*")
+                last_name = st.text_input("Last Name*")
+                email = st.text_input("Email")
+                phone = st.text_input("Phone")
 
-        with col2:
-            company = st.text_input("Company")
-            job_title = st.text_input("Job Title")
-            contact_type = st.selectbox("Type", CRM_CONTACT_TYPES)
-            owner = st.text_input("Owner")
+            with col2:
+                company = st.text_input("Company")
+                job_title = st.text_input("Job Title")
+                contact_type = st.selectbox("Type", CRM_CONTACT_TYPES)
+                owner = st.text_input("Owner")
 
-        if st.button("Add Contact", type="primary"):
-            if first_name and last_name:
-                contact = CRMContact(
-                    first_name=first_name,
-                    last_name=last_name,
-                    email=email,
-                    phone=phone,
-                    company=company,
-                    job_title=job_title,
-                    contact_type=contact_type,
-                    owner=owner
-                )
-                db.add(contact)
-                db.commit()
-                st.success("Contact added!")
-                st.session_state.view_mode = 'contacts'
-                st.rerun()
-            else:
-                st.error("Please fill in required fields")
+            if st.button("Add Contact", type="primary"):
+                if first_name and last_name:
+                    contact = CRMContact(
+                        first_name=first_name,
+                        last_name=last_name,
+                        email=email,
+                        phone=phone,
+                        company=company,
+                        job_title=job_title,
+                        contact_type=contact_type,
+                        owner=owner
+                    )
+                    db.add(contact)
+                    db.commit()
+                    st.success("Contact added!")
+                    st.session_state.view_mode = 'contacts'
+                    st.rerun()
+                else:
+                    st.error("Please fill in required fields")
 
-    db.close()
+        db.close()
+
+    except Exception as e:
+        st.error(f"Error in CRM module: {str(e)}")
+        import traceback
+        st.code(traceback.format_exc())
+
 
 if __name__ == "__main__":
     main()

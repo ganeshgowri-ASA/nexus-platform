@@ -1,16 +1,38 @@
 """Video Conference Application with WebRTC, Screen Share, Recording"""
 import streamlit as st
 from datetime import datetime, timedelta
-from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).parent.parent.parent))
-
-from database.connection import SessionLocal, init_db
-from database.models import VideoConference, ConferenceRecording
-from ai.claude_client import ClaudeClient
-from config.settings import settings
-from utils.formatters import format_date, format_duration, format_file_size
 import uuid
+
+# Lazy imports
+SessionLocal = None
+VideoConference = None
+ConferenceRecording = None
+settings = None
+format_date = None
+format_duration = None
+format_file_size = None
+
+
+def _lazy_imports():
+    """Import all dependencies lazily"""
+    global SessionLocal, VideoConference, ConferenceRecording, settings
+    global format_date, format_duration, format_file_size
+
+    from database import init_database, get_session
+    from database.models import VideoConference as _VideoConference, ConferenceRecording as _ConferenceRecording
+    from config.settings import settings as _settings
+    from utils.formatters import format_date as _format_date, format_duration as _format_duration, format_file_size as _format_file_size
+
+    SessionLocal = get_session
+    VideoConference = _VideoConference
+    ConferenceRecording = _ConferenceRecording
+    settings = _settings
+    format_date = _format_date
+    format_duration = _format_duration
+    format_file_size = _format_file_size
+
+    init_database()
+    return get_session
 
 def initialize_session_state():
     """Initialize session state variables"""
@@ -268,33 +290,40 @@ def main():
         layout="wide"
     )
 
-    # Initialize database
-    init_db()
+    try:
+        # Lazy import all dependencies
+        get_session = _lazy_imports()
 
-    # Initialize session state
-    initialize_session_state()
+        # Initialize session state
+        initialize_session_state()
 
-    # Render sidebar
-    render_sidebar()
+        # Render sidebar
+        render_sidebar()
 
-    # Render main content
-    st.title("📹 Video Conference")
+        # Render main content
+        st.title("📹 Video Conference")
 
-    db = SessionLocal()
+        db = get_session()
 
-    if st.session_state.current_conference:
-        conference = db.query(VideoConference).filter(
-            VideoConference.id == st.session_state.current_conference
-        ).first()
+        if st.session_state.current_conference:
+            conference = db.query(VideoConference).filter(
+                VideoConference.id == st.session_state.current_conference
+            ).first()
 
-        if conference:
-            render_conference_room(db, conference)
+            if conference:
+                render_conference_room(db, conference)
+            else:
+                st.error("Conference not found")
         else:
-            st.error("Conference not found")
-    else:
-        render_new_conference(db)
+            render_new_conference(db)
 
-    db.close()
+        db.close()
+
+    except Exception as e:
+        st.error(f"Error in Video Conference module: {str(e)}")
+        import traceback
+        st.code(traceback.format_exc())
+
 
 if __name__ == "__main__":
     main()

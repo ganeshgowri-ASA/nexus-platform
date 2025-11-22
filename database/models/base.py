@@ -3,8 +3,8 @@
 from datetime import datetime
 from sqlalchemy import Column, DateTime
 
-# Import Base directly from connection to avoid circular imports
-from database.connection import Base
+# Import Base from parent package
+from database import Base
 
 
 class TimestampMixin:

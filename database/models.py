@@ -7,8 +7,8 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 import uuid
 
-# Import Base from connection to ensure single declarative base
-from database.connection import Base
+# Import Base from database package (lazy loading)
+from database import Base
 
 
 def generate_uuid():

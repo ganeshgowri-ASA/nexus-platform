@@ -1,20 +1,51 @@
 """Project Management Application with Gantt, Kanban, Dependencies, Milestones"""
 import streamlit as st
 from datetime import datetime, timedelta
-from pathlib import Path
-import sys
-import plotly.figure_factory as ff
-import plotly.express as px
-import pandas as pd
-sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from database.connection import SessionLocal, init_db
-from database.models import Project, Task, Milestone
-from ai.claude_client import ClaudeClient
-from config.settings import settings
-from config.constants import PROJECT_STATUS, TASK_PRIORITY
-from utils.exporters import export_to_xlsx, export_to_pdf
-from utils.formatters import format_date, format_percentage
+# Lazy imports
+ff = None
+px = None
+pd = None
+SessionLocal = None
+Project = None
+Task = None
+Milestone = None
+settings = None
+PROJECT_STATUS = None
+TASK_PRIORITY = None
+format_date = None
+format_percentage = None
+
+
+def _lazy_imports():
+    """Import all dependencies lazily"""
+    global ff, px, pd, SessionLocal, Project, Task, Milestone
+    global settings, PROJECT_STATUS, TASK_PRIORITY, format_date, format_percentage
+
+    import plotly.figure_factory as _ff
+    import plotly.express as _px
+    import pandas as _pd
+    from database import init_database, get_session
+    from database.models import Project as _Project, Task as _Task, Milestone as _Milestone
+    from config.settings import settings as _settings
+    from config.constants import PROJECT_STATUS as _PROJECT_STATUS, TASK_PRIORITY as _TASK_PRIORITY
+    from utils.formatters import format_date as _format_date, format_percentage as _format_percentage
+
+    ff = _ff
+    px = _px
+    pd = _pd
+    SessionLocal = get_session
+    Project = _Project
+    Task = _Task
+    Milestone = _Milestone
+    settings = _settings
+    PROJECT_STATUS = _PROJECT_STATUS
+    TASK_PRIORITY = _TASK_PRIORITY
+    format_date = _format_date
+    format_percentage = _format_percentage
+
+    init_database()
+    return get_session
 
 def initialize_session_state():
     """Initialize session state variables"""
@@ -499,21 +530,28 @@ def main():
         layout="wide"
     )
 
-    # Initialize database
-    init_db()
+    try:
+        # Lazy import all dependencies
+        get_session = _lazy_imports()
 
-    # Initialize session state
-    initialize_session_state()
+        # Initialize session state
+        initialize_session_state()
 
-    # Render sidebar
-    render_sidebar()
+        # Render sidebar
+        render_sidebar()
 
-    # Render main content
-    st.title("📊 Project Management")
+        # Render main content
+        st.title("📊 Project Management")
 
-    db = SessionLocal()
-    render_project_editor(db)
-    db.close()
+        db = get_session()
+        render_project_editor(db)
+        db.close()
+
+    except Exception as e:
+        st.error(f"Error in Projects module: {str(e)}")
+        import traceback
+        st.code(traceback.format_exc())
+
 
 if __name__ == "__main__":
     main()

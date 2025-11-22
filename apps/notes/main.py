@@ -1,17 +1,35 @@
 """Notes Application with Rich Text, Tags, Folders, AI Summaries"""
 import streamlit as st
 from datetime import datetime
-from pathlib import Path
-import sys
-sys.path.append(str(Path(__file__).parent.parent.parent))
 
-from database.connection import SessionLocal, init_db
-from database.models import Note
-from ai.claude_client import ClaudeClient
-from config.settings import settings
-from config.constants import NOTE_CATEGORIES
-from utils.exporters import export_to_pdf, export_to_docx
-from utils.formatters import format_relative_time, truncate_text
+# Lazy imports
+SessionLocal = None
+Note = None
+settings = None
+NOTE_CATEGORIES = None
+format_relative_time = None
+truncate_text = None
+
+
+def _lazy_imports():
+    """Import all dependencies lazily"""
+    global SessionLocal, Note, settings, NOTE_CATEGORIES, format_relative_time, truncate_text
+
+    from database import init_database, get_session
+    from database.models import Note as _Note
+    from config.settings import settings as _settings
+    from config.constants import NOTE_CATEGORIES as _NOTE_CATEGORIES
+    from utils.formatters import format_relative_time as _format_relative_time, truncate_text as _truncate_text
+
+    SessionLocal = get_session
+    Note = _Note
+    settings = _settings
+    NOTE_CATEGORIES = _NOTE_CATEGORIES
+    format_relative_time = _format_relative_time
+    truncate_text = _truncate_text
+
+    init_database()
+    return get_session
 
 def initialize_session_state():
     """Initialize session state variables"""
@@ -336,26 +354,33 @@ def main():
         layout="wide"
     )
 
-    # Initialize database
-    init_db()
+    try:
+        # Lazy import all dependencies
+        get_session = _lazy_imports()
 
-    # Initialize session state
-    initialize_session_state()
+        # Initialize session state
+        initialize_session_state()
 
-    # Render sidebar
-    render_sidebar()
+        # Render sidebar
+        render_sidebar()
 
-    # Render main content
-    st.title("📝 Notes")
+        # Render main content
+        st.title("📝 Notes")
 
-    db = SessionLocal()
+        db = get_session()
 
-    if st.session_state.current_note is not None or st.button("Create New Note"):
-        render_note_editor(db)
-    else:
-        render_note_list(db)
+        if st.session_state.current_note is not None or st.button("Create New Note"):
+            render_note_editor(db)
+        else:
+            render_note_list(db)
 
-    db.close()
+        db.close()
+
+    except Exception as e:
+        st.error(f"Error in Notes module: {str(e)}")
+        import traceback
+        st.code(traceback.format_exc())
+
 
 if __name__ == "__main__":
     main()
