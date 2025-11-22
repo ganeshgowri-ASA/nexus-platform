@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Configuration package for Nexus Platform"""
 from config.settings import settings
 from config.celery_config import celery_app
@@ -35,3 +36,22 @@ from .config import settings
 
 __all__ = ["settings"]
 >>>>>>> origin/claude/contracts-management-module-01FmzTmE3DeZrdwEsMYTdLB9
+=======
+"""Configuration module for NEXUS platform."""
+
+from .settings import settings
+from .database import get_db, init_db
+from .redis_config import redis_client
+from .celery_config import celery_app
+from .logging_config import setup_logging, get_logger
+
+__all__ = [
+    "settings",
+    "get_db",
+    "init_db",
+    "redis_client",
+    "celery_app",
+    "setup_logging",
+    "get_logger",
+]
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL

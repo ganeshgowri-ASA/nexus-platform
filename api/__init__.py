@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 <<<<<<< HEAD
 NEXUS Platform API - FastAPI REST API Layer
@@ -16,3 +17,10 @@ Author: NEXUS Platform Team
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
 
 __version__ = "1.0.0"
+=======
+"""API package."""
+
+from .main import app
+
+__all__ = ["app"]
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL

@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 <<<<<<< HEAD
 NEXUS Platform - Main Application
@@ -381,10 +382,19 @@ app.include_router(contracts_router)
 if __name__ == "__main__":
     import uvicorn
 
+=======
+"""Main application entry point."""
+
+import uvicorn
+from api.main import app
+
+if __name__ == "__main__":
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
         port=8000,
+<<<<<<< HEAD
 <<<<<<< HEAD
         reload=True,
         log_level="info"
@@ -990,3 +1000,8 @@ Version 0.1.0
 AI-powered marketing platform
 """)
 >>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+=======
+        reload=True,
+        log_level="info",
+    )
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL

@@ -1,5 +1,5 @@
-# Byte-compiled / optimized / DLL files
 __pycache__/
+<<<<<<< HEAD
 *.py[codz]
 *$py.class
 
@@ -136,11 +136,13 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+=======
+*.pyc
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
 .env
-.envrc
-.venv
-env/
+.venv/
 venv/
+<<<<<<< HEAD
 ENV/
 env.bak/
 venv.bak/
@@ -291,3 +293,14 @@ logs/
 *~
 .DS_Store
 >>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+*.log
+logs/
+*.db
+*.sqlite
+.coverage
+htmlcov/
+.pytest_cache/
+.DS_Store
+uploads/
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL

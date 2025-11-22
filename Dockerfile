@@ -7,6 +7,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM python:3.11-slim
 
 <<<<<<< HEAD
@@ -301,6 +302,16 @@ COPY .env.example ./.env
 
 # Create app directory
 WORKDIR /app
+=======
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
 
 # Copy requirements
 COPY requirements.txt .
@@ -310,6 +321,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
+<<<<<<< HEAD
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
 
 # Create logs directory
@@ -480,3 +492,11 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 # Default command (can be overridden)
 CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+
+# Expose ports
+EXPOSE 8000
+
+# Run application
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
