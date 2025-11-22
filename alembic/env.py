@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 Alembic migration environment for NEXUS Platform.
 
@@ -65,10 +66,40 @@ from modules.integration_hub.models import *
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 config = context.config
 
+=======
+"""Alembic environment configuration."""
+from logging.config import fileConfig
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
+from alembic import context
+
+from config import get_settings
+from database import Base
+
+# Import all models to ensure they are registered with Base
+from modules.lead_generation.models import (
+    Form, LandingPage, Lead, LeadActivity, LeadMagnet,
+    ChatbotConversation, LeadScoringRule
+)
+from modules.advertising.models import (
+    Campaign, AdSet, Ad, AdCreative, CampaignPerformance,
+    AdPerformance, ABTest, AutomatedRule, ConversionTracking
+)
+
+settings = get_settings()
+
+# this is the Alembic Config object
+config = context.config
+
+# Set sqlalchemy.url from settings
+config.set_main_option("sqlalchemy.url", settings.database_sync_url)
+
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 # Interpret the config file for Python logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 # Set the SQLAlchemy URL from environment
 settings = get_settings()
@@ -80,10 +111,14 @@ config.set_main_option("sqlalchemy.url", database_url)
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 
 # Add your model's MetaData object here for 'autogenerate' support
+=======
+# add your model's MetaData object here for 'autogenerate' support
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
+<<<<<<< HEAD
 <<<<<<< HEAD
     """
     Run migrations in 'offline' mode.
@@ -147,11 +182,16 @@ def run_migrations_offline() -> None:
     """
     url = settings.DATABASE_URL_SYNC
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+    """Run migrations in 'offline' mode."""
+    url = config.get_main_option("sqlalchemy.url")
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         compare_type=True,
@@ -161,6 +201,8 @@ def run_migrations_offline() -> None:
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 =======
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     )
 
     with context.begin_transaction():
@@ -168,6 +210,7 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     """
@@ -200,11 +243,17 @@ def run_migrations_online() -> None:
     connectable = engine_from_config(
         configuration,
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+    """Run migrations in 'online' mode."""
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section, {}),
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
 
     with connectable.connect() as connection:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         context.configure(
@@ -226,6 +275,11 @@ def run_migrations_online() -> None:
             connection=connection, target_metadata=target_metadata
         )
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+        context.configure(
+            connection=connection, target_metadata=target_metadata
+        )
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 
         with context.begin_transaction():
             context.run_migrations()
@@ -233,11 +287,14 @@ def run_migrations_online() -> None:
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Run migrations based on context
 =======
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 =======
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 if context.is_offline_mode():
     run_migrations_offline()
 else:

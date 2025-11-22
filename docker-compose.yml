@@ -10,6 +10,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -538,10 +539,36 @@ volumes:
     container_name: nexus-redis
     command: redis-server --appendonly yes
 <<<<<<< HEAD
+=======
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    container_name: nexus-db
+    environment:
+      POSTGRES_DB: nexus
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus_user -d nexus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:6-alpine
+    container_name: nexus-redis
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     volumes:
       - redis_data:/data
     ports:
       - "6379:6379"
+<<<<<<< HEAD
     networks:
       - nexus
     healthcheck:
@@ -824,12 +851,15 @@ networks:
     command: celery -A src.services.task_queue.celery_app worker --loglevel=info --concurrency=4
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
 =======
+=======
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+<<<<<<< HEAD
   # FastAPI Backend
   api:
     build: .
@@ -1834,6 +1864,12 @@ volumes:
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - ENVIRONMENT=production
+=======
+  api:
+    build: .
+    container_name: nexus-api
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     ports:
       - "8000:8000"
     depends_on:
@@ -1841,6 +1877,7 @@ volumes:
         condition: service_healthy
       redis:
         condition: service_healthy
+<<<<<<< HEAD
     volumes:
       - ./backend:/app
     command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
@@ -1966,10 +2003,96 @@ networks:
 =======
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
 =======
+=======
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus_user:nexus_password@db:5432/nexus
+      - DATABASE_SYNC_URL=postgresql://nexus_user:nexus_password@db:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+
+  celery_worker:
+    build: .
+    container_name: nexus-celery-worker
+    command: celery -A celery_app worker --loglevel=info
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus_user:nexus_password@db:5432/nexus
+      - DATABASE_SYNC_URL=postgresql://nexus_user:nexus_password@db:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+
+  celery_beat:
+    build: .
+    container_name: nexus-celery-beat
+    command: celery -A celery_app beat --loglevel=info
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus_user:nexus_password@db:5432/nexus
+      - DATABASE_SYNC_URL=postgresql://nexus_user:nexus_password@db:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+
+  streamlit:
+    build: .
+    container_name: nexus-streamlit
+    command: streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+
+  flower:
+    build: .
+    container_name: nexus-flower
+    command: celery -A celery_app flower --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery_worker
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    restart: unless-stopped
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 
 volumes:
   postgres_data:
   redis_data:
+<<<<<<< HEAD
 >>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
 =======
   redis_data:
@@ -1978,3 +2101,5 @@ volumes:
 >>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
 =======
 >>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
+=======
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi

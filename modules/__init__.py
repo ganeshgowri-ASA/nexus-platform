@@ -6,6 +6,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """NEXUS Platform modules."""
 =======
 """NEXUS Platform Modules."""
@@ -136,3 +137,6 @@ __version__ = "1.0.0"
 NEXUS Platform Modules.
 """
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+"""NEXUS Platform modules."""
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """Advertising Manager Module for NEXUS Platform."""
 
 from .ad_types import (
@@ -21,3 +22,6 @@ __all__ = [
     "Bid",
     "Performance",
 ]
+=======
+"""Advertising module for NEXUS platform."""
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi

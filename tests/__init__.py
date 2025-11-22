@@ -5,6 +5,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Tests for NEXUS platform."""
 =======
 """Test suite for Nexus Search."""
@@ -36,3 +37,6 @@ __version__ = "1.0.0"
 Tests for NEXUS Content Calendar module.
 """
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+"""Tests for NEXUS platform."""
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi

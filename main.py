@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """
 <<<<<<< HEAD
 NEXUS Platform - Main Application
@@ -28,10 +29,32 @@ logger = logging.getLogger(__name__)
 
 # Global WebSocket server instance
 ws_server: Optional[WebSocketServer] = None
+=======
+"""
+Main FastAPI application for NEXUS platform.
+"""
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from loguru import logger
+
+from cache import cache
+from config import get_settings
+from modules.lead_generation.routers import (
+    forms, leads, landing_pages, chatbot
+)
+from modules.advertising.routers import (
+    campaigns, ads, creatives, performance
+)
+
+settings = get_settings()
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+<<<<<<< HEAD
     """Application lifespan manager"""
     global ws_server
 
@@ -48,18 +71,37 @@ async def lifespan(app: FastAPI):
     await ws_server.start_background_tasks()
 
     logger.info("NEXUS Platform started successfully")
+=======
+    """
+    Lifespan context manager for startup and shutdown events.
+
+    Args:
+        app: FastAPI application
+    """
+    # Startup
+    logger.info("Starting NEXUS platform...")
+    await cache.connect()
+    logger.info("NEXUS platform started successfully")
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 
     yield
 
     # Shutdown
+<<<<<<< HEAD
     logger.info("Shutting down NEXUS Platform...")
     if ws_server:
         await ws_server.shutdown()
     logger.info("NEXUS Platform shut down")
+=======
+    logger.info("Shutting down NEXUS platform...")
+    await cache.disconnect()
+    logger.info("NEXUS platform shutdown complete")
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 
 
 # Create FastAPI app
 app = FastAPI(
+<<<<<<< HEAD
     title="NEXUS Platform",
     description="Real-time collaboration platform with WebSocket support",
     version="1.0.0",
@@ -103,11 +145,24 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Configure appropriately for production
+=======
+    title="NEXUS Platform API",
+    description="Unified AI-powered productivity platform with lead generation and advertising modules",
+    version="1.0.0",
+    lifespan=lifespan
+)
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 # Dependency for authentication (example - implement your own)
@@ -146,10 +201,56 @@ async def shutdown_event():
     """Application shutdown event handler."""
     logger.info("Shutting down NEXUS platform")
 >>>>>>> origin/claude/contracts-management-module-01FmzTmE3DeZrdwEsMYTdLB9
+=======
+# Include routers - Lead Generation
+app.include_router(
+    forms.router,
+    prefix="/api/lead-generation/forms",
+    tags=["Lead Generation - Forms"]
+)
+app.include_router(
+    landing_pages.router,
+    prefix="/api/lead-generation/landing-pages",
+    tags=["Lead Generation - Landing Pages"]
+)
+app.include_router(
+    leads.router,
+    prefix="/api/lead-generation/leads",
+    tags=["Lead Generation - Leads"]
+)
+app.include_router(
+    chatbot.router,
+    prefix="/api/lead-generation/chatbot",
+    tags=["Lead Generation - Chatbot"]
+)
+
+# Include routers - Advertising
+app.include_router(
+    campaigns.router,
+    prefix="/api/advertising/campaigns",
+    tags=["Advertising - Campaigns"]
+)
+app.include_router(
+    ads.router,
+    prefix="/api/advertising/ads",
+    tags=["Advertising - Ads"]
+)
+app.include_router(
+    creatives.router,
+    prefix="/api/advertising/creatives",
+    tags=["Advertising - Creatives"]
+)
+app.include_router(
+    performance.router,
+    prefix="/api/advertising/performance",
+    tags=["Advertising - Performance"]
+)
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 
 
 @app.get("/")
 async def root():
+<<<<<<< HEAD
 <<<<<<< HEAD
     """Root endpoint"""
     return {
@@ -164,10 +265,18 @@ async def root():
         "version": settings.APP_VERSION,
         "status": "running",
 >>>>>>> origin/claude/contracts-management-module-01FmzTmE3DeZrdwEsMYTdLB9
+=======
+    """Root endpoint."""
+    return {
+        "name": "NEXUS Platform API",
+        "version": "1.0.0",
+        "modules": ["Lead Generation", "Advertising"]
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     }
 
 
 @app.get("/health")
+<<<<<<< HEAD
 async def health_check():
 <<<<<<< HEAD
     """Health check endpoint"""
@@ -370,10 +479,14 @@ async def get_document_session(document_id: str):
         "user_count": len(session.active_users)
     }
 =======
+=======
+async def health():
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     """Health check endpoint."""
     return {"status": "healthy"}
 
 
+<<<<<<< HEAD
 # Include routers
 app.include_router(contracts_router)
 >>>>>>> origin/claude/contracts-management-module-01FmzTmE3DeZrdwEsMYTdLB9
@@ -390,10 +503,16 @@ from api.main import app
 
 if __name__ == "__main__":
 >>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
+=======
+if __name__ == "__main__":
+    import uvicorn
+
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
         port=8000,
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         reload=True,
@@ -1005,3 +1124,7 @@ AI-powered marketing platform
         log_level="info",
     )
 >>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
+=======
+        reload=settings.environment == "development"
+    )
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi

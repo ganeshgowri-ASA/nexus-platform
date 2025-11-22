@@ -5,6 +5,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Pytest configuration and fixtures."""
 
 import pytest
@@ -595,20 +596,42 @@ from src.models.base import Workspace, User
 # Test database URL (in-memory SQLite)
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 >>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+=======
+"""
+Pytest configuration and fixtures.
+"""
+import pytest
+import asyncio
+from typing import AsyncGenerator, Generator
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import sessionmaker
+from httpx import AsyncClient
+
+from database import Base
+from main import app
+
+
+# Test database URL
+TEST_DATABASE_URL = "postgresql+asyncpg://user:password@localhost:5432/nexus_test"
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 
 
 @pytest.fixture(scope="session")
 def event_loop() -> Generator:
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 =======
 >>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+=======
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     """Create event loop for async tests."""
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 # Authentication helpers
@@ -872,6 +895,12 @@ async def test_engine():
         echo=False,
         poolclass=NullPool,
     )
+=======
+@pytest.fixture(scope="session")
+async def test_engine():
+    """Create test database engine."""
+    engine = create_async_engine(TEST_DATABASE_URL, echo=False)
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
@@ -884,6 +913,7 @@ async def test_engine():
     await engine.dispose()
 
 
+<<<<<<< HEAD
 @pytest_asyncio.fixture(scope="function")
 async def db_session(test_engine) -> AsyncGenerator[AsyncSession, None]:
     """Create test database session."""
@@ -915,10 +945,18 @@ async def test_db() -> AsyncGenerator[AsyncSession, None]:
 >>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
         class_=AsyncSession,
         expire_on_commit=False,
+=======
+@pytest.fixture
+async def db_session(test_engine) -> AsyncGenerator[AsyncSession, None]:
+    """Create database session for tests."""
+    async_session = sessionmaker(
+        test_engine, class_=AsyncSession, expire_on_commit=False
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     )
 
     async with async_session() as session:
         yield session
+<<<<<<< HEAD
 <<<<<<< HEAD
         await session.rollback()
 
@@ -1232,3 +1270,13 @@ def mock_llm_response():
         "body": "<h1>Test Email</h1><p>This is a test email.</p>",
     }
 >>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+=======
+        await session.rollback()
+
+
+@pytest.fixture
+async def client() -> AsyncGenerator[AsyncClient, None]:
+    """Create test client."""
+    async with AsyncClient(app=app, base_url="http://test") as client:
+        yield client
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi

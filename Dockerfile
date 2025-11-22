@@ -8,6 +8,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM python:3.11-slim
 
 <<<<<<< HEAD
@@ -57,11 +58,17 @@ RUN apt-get update && apt-get install -y \
 =======
 =======
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+FROM python:3.11-slim
+
+WORKDIR /app
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
     postgresql-client \
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
 =======
@@ -145,10 +152,14 @@ COPY requirements.txt .
     g++ \
     postgresql-client \
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+    libpq-dev \
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies
 COPY requirements.txt .
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> origin/claude/elasticsearch-search-implementation-013e5Tg92YLzoP4Dme7tcjZR
 =======
@@ -159,11 +170,14 @@ COPY requirements.txt .
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 =======
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -500,3 +514,10 @@ EXPOSE 8000
 # Run application
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 >>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
+=======
+# Expose ports
+EXPOSE 8000 8501
+
+# Default command (can be overridden)
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi

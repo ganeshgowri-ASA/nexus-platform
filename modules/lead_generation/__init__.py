@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 Lead Generation Module for NEXUS Platform.
 
@@ -29,3 +30,6 @@ __all__ = [
     "Touchpoint",
     "Conversion",
 ]
+=======
+"""Lead generation module for NEXUS platform."""
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
