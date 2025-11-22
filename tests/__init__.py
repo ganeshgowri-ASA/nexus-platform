@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Tests for NEXUS platform."""
 =======
 """Test suite for Nexus Search."""
@@ -24,3 +25,8 @@ __version__ = "1.0.0"
 =======
 """Test suite for NEXUS platform."""
 >>>>>>> origin/claude/excel-spreadsheet-editor-01ERQuTgtV3Kb8CMNgURhB2E
+=======
+"""Test suite for NEXUS platform."""
+
+__version__ = "1.0.0"
+>>>>>>> origin/claude/contracts-management-module-01FmzTmE3DeZrdwEsMYTdLB9

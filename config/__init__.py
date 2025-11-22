@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Configuration package for Nexus Platform"""
 from config.settings import settings
 from config.celery_config import celery_app
@@ -27,3 +28,10 @@ __all__ = ["settings"]
 =======
 """Configuration module for NEXUS platform."""
 >>>>>>> origin/claude/excel-spreadsheet-editor-01ERQuTgtV3Kb8CMNgURhB2E
+=======
+"""Configuration package."""
+
+from .config import settings
+
+__all__ = ["settings"]
+>>>>>>> origin/claude/contracts-management-module-01FmzTmE3DeZrdwEsMYTdLB9
