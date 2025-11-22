@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Python
 __pycache__/
 =======
@@ -35,10 +36,15 @@ __pycache__/
 # Python
 __pycache__/
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+# Python
+__pycache__/
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
 *.py[cod]
 *$py.class
 *.so
 .Python
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -63,6 +69,11 @@ env/
 venv/
 ENV/
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+env/
+venv/
+ENV/
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
 build/
 develop-eggs/
 dist/
@@ -78,6 +89,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+<<<<<<< HEAD
 <<<<<<< HEAD
 MANIFEST
 
@@ -116,12 +128,20 @@ build/
 venv/
 env/
 ENV/
+=======
+
+# Environment
+.env
+.env.local
+*.env
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+<<<<<<< HEAD
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
 
 # Testing
@@ -186,12 +206,20 @@ dmypy.json
 # Logs
 *.log
 logs/
+=======
+*~
+
+# Logs
+logs/
+*.log
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
 
 # Database
 *.db
 *.sqlite
 *.sqlite3
 
+<<<<<<< HEAD
 # Storage
 storage/
 temp/
@@ -317,10 +345,17 @@ airflow/*.pid
 airflow/*.cfg
 
 # Test
+=======
+# Uploads
+uploads/
+
+# Testing
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
 .pytest_cache/
 .coverage
 htmlcov/
 
+<<<<<<< HEAD
 # Documentation
 docs/_build/
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
@@ -341,3 +376,19 @@ docs/_build/
 .DS_Store
 Thumbs.db
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+docs/_build/
+
+# Node
+node_modules/
+npm-debug.log
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS

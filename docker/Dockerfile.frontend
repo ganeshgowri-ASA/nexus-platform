@@ -1,6 +1,7 @@
 FROM python:3.11-slim
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Set working directory
 =======
 >>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
@@ -19,11 +20,25 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 <<<<<<< HEAD
+=======
+# Set working directory
+WORKDIR /app
+
+# Copy requirements
+COPY frontend/requirements.txt .
+
+# Install dependencies
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy application code
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
 COPY frontend/ .
 
 # Expose port
 EXPOSE 8501
 
+<<<<<<< HEAD
 # Run application
 CMD ["streamlit", "run", "pages/Attribution.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
 =======
@@ -35,3 +50,11 @@ EXPOSE 8501
 # Run Streamlit
 CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
 >>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8501/_stcore/health || exit 1
+
+# Run Streamlit
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 Pydantic schemas for NEXUS Platform.
 
@@ -73,3 +74,6 @@ __all__ = [
     "BudgetAllocation",
     "OptimizationRequest",
 ]
+=======
+"""Pydantic schemas for request/response validation"""
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS

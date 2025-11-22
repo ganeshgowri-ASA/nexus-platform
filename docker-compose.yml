@@ -12,6 +12,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -78,10 +79,13 @@ services:
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
 =======
 >>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
 version: '3.8'
 
 services:
   # PostgreSQL Database
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -96,10 +100,13 @@ services:
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
 =======
 >>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
   postgres:
     image: postgres:15-alpine
     container_name: nexus-postgres
     environment:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -185,10 +192,16 @@ services:
       POSTGRES_USER: nexus
       POSTGRES_PASSWORD: nexus
 >>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
+=======
+      POSTGRES_DB: nexus_db
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_pass
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -544,12 +557,17 @@ volumes:
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
 >>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus_user -d nexus_db"]
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
       - nexus-network
 
+<<<<<<< HEAD
   # Redis Cache
 <<<<<<< HEAD
 >>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
@@ -657,17 +675,24 @@ networks:
 =======
 >>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
 =======
+=======
+  # Redis for Celery
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
   redis:
     image: redis:7-alpine
     container_name: nexus-redis
     ports:
       - "6379:6379"
+<<<<<<< HEAD
 >>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -926,10 +951,13 @@ networks:
       - influxdb_data:/var/lib/influxdb2
 =======
 >>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
     networks:
       - nexus-network
 
   # FastAPI Backend
+<<<<<<< HEAD
 <<<<<<< HEAD
   api:
     build:
@@ -2043,11 +2071,14 @@ volumes:
 
   # Backend API
 >>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
   backend:
     build:
       context: .
       dockerfile: docker/Dockerfile.backend
     container_name: nexus-backend
+<<<<<<< HEAD
 <<<<<<< HEAD
     environment:
       - DB_USER=${DB_USER}
@@ -2097,6 +2128,23 @@ volumes:
       DEBUG: "True"
       SECRET_KEY: "development-secret-key-change-in-production"
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+=======
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus_user:nexus_pass@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - APP_ENV=development
+      - DEBUG=True
+      - UPLOAD_DIR=/app/uploads
+      - TESSERACT_CMD=/usr/bin/tesseract
+    volumes:
+      - ./backend/app:/app/app
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
     depends_on:
       postgres:
         condition: service_healthy
@@ -2104,14 +2152,22 @@ volumes:
         condition: service_healthy
     networks:
       - nexus-network
+<<<<<<< HEAD
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
   # Celery Worker
   celery_worker:
+=======
+    restart: unless-stopped
+
+  # Celery Worker
+  celery-worker:
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
     build:
       context: .
       dockerfile: docker/Dockerfile.celery
     container_name: nexus-celery-worker
+<<<<<<< HEAD
     volumes:
       - ./backend:/app
       - ./uploads:/app/uploads
@@ -2156,11 +2212,32 @@ volumes:
 
   # Frontend (Streamlit)
 >>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus_user:nexus_pass@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    volumes:
+      - ./backend/app:/app/app
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      - postgres
+      - redis
+      - backend
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Streamlit Frontend
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
   frontend:
     build:
       context: .
       dockerfile: docker/Dockerfile.frontend
     container_name: nexus-frontend
+<<<<<<< HEAD
 <<<<<<< HEAD
     environment:
       - BACKEND_URL=http://backend:8000
@@ -2181,19 +2258,34 @@ volumes:
       - "8501:8501"
     environment:
       API_BASE_URL: http://backend:8000
+=======
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_API_URL=http://backend:8000
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
     depends_on:
       - backend
     networks:
       - nexus-network
+<<<<<<< HEAD
     command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0
 
 volumes:
   postgres_data:
 >>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
 
 networks:
   nexus-network:
     driver: bridge
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -2303,3 +2395,5 @@ volumes:
 >>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
 =======
 >>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
