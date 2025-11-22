@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 [theme]
 primaryColor = "#667eea"
 <<<<<<< HEAD
@@ -109,3 +110,23 @@ showWarningOnDirectExecution = true
 maxCachedMessageAge = 2.0
 minCachedMessageSize = 100000
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+[theme]
+primaryColor="#4F46E5"
+backgroundColor="#FFFFFF"
+secondaryBackgroundColor="#F3F4F6"
+textColor="#1F2937"
+font="sans serif"
+
+[server]
+maxUploadSize=50
+enableCORS=false
+enableXsrfProtection=true
+
+[browser]
+gatherUsageStats=false
+
+[runner]
+magicEnabled=true
+fastReruns=true
+>>>>>>> origin/claude/word-editor-module-01PPyUEeNUgZmU4swtfxgoCB
