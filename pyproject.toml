@@ -1,0 +1,1090 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+=======
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+>>>>>>> origin/claude/notes-taking-module-013StF1A3r6dn5NufjWAXYTn
+=======
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nexus-platform"
+<<<<<<< HEAD
+<<<<<<< HEAD
+version = "0.1.0"
+<<<<<<< HEAD
+description = "NEXUS: Unified AI-powered productivity platform with 24 integrated modules"
+readme = "README.md"
+requires-python = ">=3.9"
+=======
+[project]
+name = "nexus-platform"
+version = "1.0.0"
+description = "NEXUS: Unified AI-powered productivity platform with A/B testing module"
+readme = "README.md"
+requires-python = ">=3.11"
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+license = {text = "MIT"}
+authors = [
+    {name = "NEXUS Team"}
+]
+<<<<<<< HEAD
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    "streamlit>=1.28.0",
+    "python-dotenv>=1.0.0",
+    "structlog>=23.2.0",
+    "python-json-logger>=2.0.7",
+    "colorama>=0.4.6",
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "pydantic>=2.5.0",
+    "sqlalchemy>=2.0.23",
+    "alembic>=1.13.0",
+    "aiofiles>=23.2.1",
+    "python-dateutil>=2.8.2",
+    "pytz>=2023.3",
+=======
+
+dependencies = [
+    "fastapi>=0.109.2",
+    "uvicorn[standard]>=0.27.1",
+    "pydantic>=2.6.1",
+    "pydantic-settings>=2.1.0",
+    "sqlalchemy>=2.0.25",
+    "psycopg2-binary>=2.9.9",
+    "alembic>=1.13.1",
+    "redis>=5.0.1",
+    "hiredis>=2.3.2",
+    "numpy>=1.26.4",
+    "scipy>=1.12.0",
+    "pandas>=2.2.0",
+    "statsmodels>=0.14.1",
+    "streamlit>=1.31.1",
+    "plotly>=5.18.0",
+    "altair>=5.2.0",
+    "python-dotenv>=1.0.1",
+    "python-multipart>=0.0.9",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "loguru>=0.7.2",
+    "prometheus-client>=0.19.0",
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+[project]
+name = "nexus-platform"
+version = "1.0.0"
+description = "Production-ready NEXUS platform with integrated analytics module"
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+dependencies = [
+    # Core Framework
+    "streamlit>=1.31.0",
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+
+    # AI Integration
+    "anthropic>=0.18.0",
+    "openai>=1.12.0",
+
+    # Database
+    "sqlalchemy>=2.0.25",
+    "alembic>=1.13.1",
+    "psycopg2-binary>=2.9.9",
+    "asyncpg>=0.29.0",
+
+    # Caching & Task Queue
+    "redis>=5.0.1",
+    "celery>=5.3.6",
+    "flower>=2.0.1",
+
+    # Data Processing
+    "pandas>=2.2.0",
+    "numpy>=1.26.3",
+    "polars>=0.20.6",
+    "pyarrow>=15.0.0",
+
+    # Time Series
+    "influxdb-client>=1.40.0",
+
+    # Machine Learning
+    "scikit-learn>=1.4.0",
+    "prophet>=1.1.5",
+    "statsmodels>=0.14.1",
+
+    # Visualization
+    "plotly>=5.18.0",
+    "altair>=5.2.0",
+    "matplotlib>=3.8.2",
+    "seaborn>=0.13.2",
+
+    # Data Validation
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.1.0",
+
+    # Utilities
+    "python-dotenv>=1.0.1",
+    "pytz>=2024.1",
+    "python-dateutil>=2.8.2",
+    "click>=8.1.7",
+
+    # Export Formats
+    "openpyxl>=3.1.2",
+    "reportlab>=4.0.9",
+    "fpdf2>=2.7.8",
+
+    # HTTP & API
+    "httpx>=0.26.0",
+    "aiohttp>=3.9.3",
+
+    # Monitoring
+    "prometheus-client>=0.19.0",
+
+    # Serialization
+    "orjson>=3.9.13",
+    "msgpack>=1.0.7",
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+]
+
+[project.optional-dependencies]
+dev = [
+<<<<<<< HEAD
+<<<<<<< HEAD
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+=======
+[tool.poetry]
+name = "nexus-platform"
+version = "0.1.0"
+description = "Unified AI-powered productivity platform with 24 integrated modules"
+authors = ["NEXUS Team"]
+readme = "README.md"
+packages = [{include = "backend"}, {include = "frontend"}, {include = "modules"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+# FastAPI Backend
+fastapi = "^0.109.0"
+uvicorn = {extras = ["standard"], version = "^0.27.0"}
+pydantic = "^2.6.0"
+pydantic-settings = "^2.1.0"
+python-multipart = "^0.0.9"
+
+# Database
+sqlalchemy = "^2.0.25"
+alembic = "^1.13.1"
+psycopg2-binary = "^2.9.9"
+asyncpg = "^0.29.0"
+
+# Authentication & Security
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+bcrypt = "^4.1.2"
+python-dotenv = "^1.0.0"
+
+# Redis & Caching
+redis = "^5.0.1"
+hiredis = "^2.3.2"
+
+# Celery for async tasks
+celery = {extras = ["redis"], version = "^5.3.6"}
+flower = "^2.0.1"
+
+# File Storage & Processing
+boto3 = "^1.34.34"  # AWS S3
+azure-storage-blob = "^12.19.0"  # Azure Blob Storage
+google-cloud-storage = "^2.14.0"  # Google Cloud Storage
+pillow = "^10.2.0"  # Image processing
+python-magic = "^0.4.27"  # File type detection
+pypdf = "^4.0.0"  # PDF processing
+openpyxl = "^3.1.2"  # Excel files
+python-docx = "^1.1.0"  # Word documents
+python-pptx = "^0.6.23"  # PowerPoint files
+
+# OCR & Document Processing
+pytesseract = "^0.3.10"  # OCR
+pdf2image = "^1.17.0"  # PDF to image conversion
+
+# Search & Indexing
+elasticsearch = "^8.12.0"
+whoosh = "^2.7.4"
+
+# AI/LLM Integration
+anthropic = "^0.18.0"  # Claude AI
+openai = "^1.12.0"  # OpenAI GPT
+langchain = "^0.1.6"
+langchain-anthropic = "^0.1.1"
+
+# Document Conversion
+pandoc = "^2.3"
+pypandoc = "^1.12"
+
+# Version Control & Diffing
+diff-match-patch = "^20230430"
+gitpython = "^3.1.41"
+
+# Streamlit Frontend
+streamlit = "^1.31.0"
+streamlit-aggrid = "^0.3.4"
+streamlit-option-menu = "^0.3.6"
+streamlit-ace = "^0.1.1"
+plotly = "^5.18.0"
+streamlit-player = "^0.1.5"
+
+# HTTP & API Clients
+httpx = "^0.26.0"
+requests = "^2.31.0"
+aiofiles = "^23.2.1"
+
+# WebSocket
+websockets = "^12.0"
+python-socketio = "^5.11.0"
+
+# Data Processing
+pandas = "^2.2.0"
+numpy = "^1.26.3"
+python-dateutil = "^2.8.2"
+
+# Utilities
+pyyaml = "^6.0.1"
+toml = "^0.10.2"
+click = "^8.1.7"
+rich = "^13.7.0"
+tqdm = "^4.66.1"
+
+# Email
+python-email-validator = "^2.1.0"
+aiosmtplib = "^3.0.1"
+
+# Monitoring & Logging
+structlog = "^24.1.0"
+loguru = "^0.7.2"
+
+# Testing
+pytest = "^8.0.0"
+pytest-asyncio = "^0.23.4"
+pytest-cov = "^4.1.0"
+pytest-mock = "^3.12.0"
+httpx-mock = "^0.9.0"
+faker = "^22.6.0"
+
+# Code Quality
+black = "^24.1.1"
+ruff = "^0.2.0"
+mypy = "^1.8.0"
+pre-commit = "^3.6.0"
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.21.0"
+ipdb = "^0.13.13"
+watchdog = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+=======
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.4",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.26.0",
+    "black>=24.1.1",
+    "ruff>=0.2.1",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+
+=======
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+version = "1.0.0"
+description = "NEXUS: Unified AI-powered productivity platform"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "NEXUS Team", email = "team@nexus.com"}
+]
+
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | \.mypy_cache
+  | \.pytest_cache
+  | \.tox
+  | __pycache__
+  | build
+  | dist
+  | alembic
+)/
+'''
+=======
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.4",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-xdist>=3.5.0",
+    "ruff>=0.2.1",
+    "mypy>=1.8.0",
+    "black>=24.1.1",
+    "isort>=5.13.2",
+    "pre-commit>=3.6.0",
+    "ipython>=8.21.0",
+    "ipdb>=0.13.13",
+]
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+<<<<<<< HEAD
+<<<<<<< HEAD
+select = [
+<<<<<<< HEAD
+<<<<<<< HEAD
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "C",   # flake8-comprehensions
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+=======
+=======
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+description = "Comprehensive note-taking and productivity platform powered by AI"
+=======
+version = "0.1.0"
+description = "Unified AI-powered productivity platform with 24 integrated modules"
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+=======
+=======
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nexus-platform"
+<<<<<<< HEAD
+version = "1.0.0"
+description = "Nexus AI Automation Platform - Sessions 56-65"
+>>>>>>> origin/claude/ai-automation-platform-01KUSGzg11wJKZGW5xToQEW5
+=======
+version = "0.1.0"
+description = "NEXUS - Unified AI-Powered Productivity Platform with 24 Integrated Modules"
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    {name = "Nexus Team"},
+]
+keywords = ["notes", "productivity", "ai", "streamlit"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311"]
+=======
+    {name = "NEXUS Team", email = "info@nexus-platform.io"}
+]
+keywords = ["ai", "productivity", "automation", "marketing", "streamlit"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+=======
+    {name = "NEXUS Team", email = "team@nexus-platform.com"}
+]
+keywords = ["ai", "productivity", "translation", "document-processing", "streamlit"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+<<<<<<< HEAD
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311', 'py312']
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+=======
+dependencies = [
+    # Core Framework
+    "streamlit>=1.28.0",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "websockets>=12.0",
+
+    # AI & LLM
+    "anthropic>=0.7.0",
+    "openai>=1.3.0",
+
+    # Database
+    "sqlalchemy>=2.0.0",
+    "alembic>=1.12.0",
+    "psycopg2-binary>=2.9.9",
+    "asyncpg>=0.29.0",
+
+    # Caching & Queue
+    "redis>=5.0.0",
+    "celery>=5.3.4",
+    "flower>=2.0.1",
+
+    # Translation Engines
+    "googletrans==4.0.0rc1",
+    "deepl>=1.16.0",
+    "azure-ai-translation-text>=1.0.0",
+    "boto3>=1.29.0",
+
+    # Language Detection
+    "langdetect>=1.0.9",
+    "langid>=1.1.6",
+    "pycld2>=0.41",
+
+    # Document Processing
+    "PyPDF2>=3.0.0",
+    "pypdf>=3.17.0",
+    "python-docx>=1.1.0",
+    "openpyxl>=3.1.0",
+    "python-pptx>=0.6.23",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=4.9.0",
+    "markdown>=3.5.0",
+
+    # File Storage
+    "minio>=7.2.0",
+    "google-cloud-storage>=2.13.0",
+    "azure-storage-blob>=12.19.0",
+
+    # Validation & Configuration
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "python-dotenv>=1.0.0",
+    "python-multipart>=0.0.6",
+
+    # Security & Auth
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "cryptography>=41.0.0",
+
+    # HTTP & API
+    "httpx>=0.25.0",
+    "requests>=2.31.0",
+    "aiohttp>=3.9.0",
+
+    # Translation Memory & Formats
+    "translate-toolkit>=3.11.0",
+    "polib>=1.2.0",
+
+    # Monitoring & Logging
+    "prometheus-client>=0.19.0",
+    "sentry-sdk>=1.38.0",
+    "structlog>=23.2.0",
+
+    # Utils
+    "python-dateutil>=2.8.2",
+    "pytz>=2023.3",
+    "tenacity>=8.2.3",
+    "tqdm>=4.66.0",
+    "click>=8.1.7",
+
+    # Data Processing
+    "pandas>=2.1.0",
+    "numpy>=1.26.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-xdist>=3.5.0",
+    "black>=23.11.0",
+    "isort>=5.12.0",
+    "flake8>=6.1.0",
+    "mypy>=1.7.0",
+    "pylint>=3.0.0",
+    "pre-commit>=3.5.0",
+]
+
+[project.scripts]
+nexus = "nexus.cli:main"
+nexus-server = "nexus.server:run"
+
+[tool.setuptools]
+packages = ["nexus", "config"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311']
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+<<<<<<< HEAD
+=======
+    {name = "Nexus Team"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+[project.urls]
+Homepage = "https://github.com/ganeshgowri-ASA/nexus-platform"
+Repository = "https://github.com/ganeshgowri-ASA/nexus-platform"
+
+[tool.black]
+line-length = 100
+target-version = ['py310', 'py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+>>>>>>> origin/claude/ai-automation-platform-01KUSGzg11wJKZGW5xToQEW5
+=======
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = [
+>>>>>>> origin/claude/notes-taking-module-013StF1A3r6dn5NufjWAXYTn
+=======
+
+[tool.ruff.lint]
+select = [
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+select = [
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    "C",  # flake8-comprehensions
+    "B",  # flake8-bugbear
+=======
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+>>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
+=======
+    "B008",  # do not perform function calls in argument defaults
+]
+=======
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+line_length = 100
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+    "B008",  # do not perform function calls in argument defaults
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+<<<<<<< HEAD
+<<<<<<< HEAD
+ignore_missing_imports = true
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+strict_equality = true
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+addopts = "-v --cov=src --cov-report=term-missing"
+=======
+addopts = [
+    "--strict-markers",
+    "--cov=backend",
+    "--cov=modules",
+    "--cov-report=html",
+    "--cov-report=term-missing:skip-covered",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+=======
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+<<<<<<< HEAD
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = [
+    "pytesseract.*",
+    "pdf2image.*",
+    "python_magic.*",
+    "streamlit.*",
+    "streamlit_aggrid.*",
+    "streamlit_option_menu.*",
+]
+ignore_missing_imports = true
+
+[tool.coverage.run]
+omit = [
+    "*/tests/*",
+    "*/alembic/*",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+precision = 2
+=======
+=======
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults
+    "C901", # too complex
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+=======
+=======
+>>>>>>> origin/claude/ai-automation-platform-01KUSGzg11wJKZGW5xToQEW5
+=======
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+<<<<<<< HEAD
+<<<<<<< HEAD
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+=======
+
+[tool.pylint.messages_control]
+max-line-length = 100
+disable = [
+    "C0111",  # missing-docstring
+    "C0103",  # invalid-name
+    "R0903",  # too-few-public-methods
+]
+>>>>>>> origin/claude/ai-automation-platform-01KUSGzg11wJKZGW5xToQEW5
+=======
+force_grid_wrap = 0
+use_parentheses = true
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+<<<<<<< HEAD
+<<<<<<< HEAD
+disallow_untyped_defs = true
+<<<<<<< HEAD
+>>>>>>> origin/claude/notes-taking-module-013StF1A3r6dn5NufjWAXYTn
+disallow_incomplete_defs = true
+check_untyped_defs = true
+=======
+=======
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = false
+<<<<<<< HEAD
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+<<<<<<< HEAD
+<<<<<<< HEAD
+strict_equality = true
+
+<<<<<<< HEAD
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra -q --strict-markers --cov=modules --cov-report=term-missing --cov-report=html"
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["modules"]
+omit = ["*/tests/*", "*/migrations/*"]
+
+[tool.coverage.report]
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+follow_imports = "normal"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["modules", "shared"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = """
+    -v
+    --tb=short
+    --cov=modules
+    --cov=shared
+    --cov-report=html
+    --cov-report=term-missing:skip-covered
+    --cov-fail-under=80
+    --asyncio-mode=auto
+"""
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+source = ["modules", "shared"]
+=======
+follow_imports = "normal"
+ignore_missing_imports = true
+pretty = true
+show_column_numbers = true
+show_error_codes = true
+show_error_context = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=src",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "e2e: marks tests as end-to-end tests",
+]
+
+[tool.coverage.run]
+source = ["src"]
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__init__.py",
+]
+
+[tool.coverage.report]
+<<<<<<< HEAD
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-v --cov=src/nexus --cov-report=html --cov-report=term-missing --cov-report=xml"
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["src/nexus"]
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/venv/*",
+]
+
+[tool.coverage.report]
+>>>>>>> origin/claude/ai-automation-platform-01KUSGzg11wJKZGW5xToQEW5
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+>>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
+=======
+]
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+addopts = "-v --cov=modules --cov-report=html --cov-report=term"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nexus-platform"
+version = "0.1.0"
+description = "NEXUS: Unified AI-powered productivity platform with ETL and Integration Hub modules"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "sqlalchemy>=2.0.25",
+    "celery>=5.3.6",
+    "redis>=5.0.1",
+    "pandas>=2.2.0",
+    "streamlit>=1.30.0",
+]
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --cov=src --cov-report=term-missing --cov-report=html"
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "e2e: marks tests as end-to-end tests",
+]
+>>>>>>> origin/claude/notes-taking-module-013StF1A3r6dn5NufjWAXYTn
+=======
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=modules",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+markers = [
+    "slow: marks tests as slow",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+precision = 2
+show_missing = true
+skip_covered = false
+>>>>>>> origin/claude/marketing-automation-module-01QZjZLNDEejmtRGTMvcovNS
+=======
+]
+>>>>>>> origin/claude/ai-automation-platform-01KUSGzg11wJKZGW5xToQEW5
+=======
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --cov=nexus --cov-report=html --cov-report=term-missing"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+
+[tool.coverage.run]
+source = ["nexus"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D

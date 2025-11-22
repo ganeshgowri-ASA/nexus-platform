@@ -1,0 +1,2687 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+version: '3.8'
+
+services:
+<<<<<<< HEAD
+<<<<<<< HEAD
+  # Redis - Message Broker and Result Backend
+=======
+  # PostgreSQL Database
+=======
+# NEXUS Platform Docker Compose Configuration
+version: '3.8'
+
+services:
+  # ============================================================================
+  # Main Application Service
+  # ============================================================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nexus-platform:latest
+    container_name: nexus-app
+    ports:
+      - "8501:8501"
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - DATABASE__URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus}@postgres:5432/${POSTGRES_DB:-nexus}
+      - ANTHROPIC__API_KEY=${ANTHROPIC__API_KEY}
+      - REDIS__HOST=redis
+      - REDIS__PORT=6379
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+    networks:
+      - nexus-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================================
+  # PostgreSQL Database Service
+  # ============================================================================
+>>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+=======
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+=======
+>>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+=======
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+=======
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+  postgres:
+    image: postgres:15-alpine
+    container_name: nexus-postgres
+    environment:
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: nexus_db
+=======
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+=======
+version: '3.8'
+
+services:
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+version: '3.8'
+
+services:
+  # ============================================================================
+  # PostgreSQL Database
+  # ============================================================================
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexus-postgres
+    environment:
+<<<<<<< HEAD
+<<<<<<< HEAD
+      POSTGRES_USER: ${POSTGRES_USER:-nexus}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nexus_password}
+      POSTGRES_DB: ${POSTGRES_DB:-nexus_db}
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus
+      POSTGRES_DB: nexus_scheduler
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+      POSTGRES_DB: nexus_platform
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus_dev_password
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nexus_orchestration
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nexus
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+      POSTGRES_DB: nexus_db
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_password
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+=======
+  postgres:
+    image: timescale/timescaledb:latest-pg15
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_DB: nexus_analytics
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus_password
+      PGDATA: /var/lib/postgresql/data/pgdata
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: nexus
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
+=======
+      POSTGRES_DB: nexus_db
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_pass
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+=======
+  postgres:
+    image: postgres:15
+    container_name: nexus_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nexus_platform
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus"]
+=======
+      - POSTGRES_USER=${POSTGRES_USER:-nexus}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-nexus}
+      - POSTGRES_DB=${POSTGRES_DB:-nexus}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - nexus-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nexus}"]
+>>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+  # Redis Cache
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+  # ============================================================================
+  # Redis Cache Service
+  # ============================================================================
+>>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+=======
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus_password
+      POSTGRES_DB: nexus
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+    networks:
+      - nexus-network
+
+  # Redis Cache & Message Broker
+<<<<<<< HEAD
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+
+  # Redis
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+=======
+  # Redis
+  redis:
+    image: redis:7-alpine
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+=======
+=======
+  postgres:
+    image: postgres:14-alpine
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_DB: nexus_db
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_password
+=======
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_password
+      POSTGRES_DB: nexus_db
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+<<<<<<< HEAD
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+=======
+  postgres:
+    image: postgres:14
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_pass
+      POSTGRES_DB: nexus_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+>>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    networks:
+      - nexus-network
+
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+<<<<<<< HEAD
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+=======
+
+  redis:
+    image: redis:7
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # Celery Worker - Default Queue
+  celery_worker:
+    build: .
+    container_name: nexus-celery-worker
+    command: celery -A config.celery_config worker --loglevel=info -Q default_queue
+    volumes:
+      - ./:/app
+      - ./uploads:/app/uploads
+      - ./temp:/app/temp
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Celery Worker - Email Queue
+  celery_worker_email:
+    build: .
+    container_name: nexus-celery-worker-email
+    command: celery -A config.celery_config worker --loglevel=info -Q email_queue
+    volumes:
+      - ./:/app
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Celery Worker - File Processing Queue
+  celery_worker_files:
+    build: .
+    container_name: nexus-celery-worker-files
+    command: celery -A config.celery_config worker --loglevel=info -Q file_processing_queue
+    volumes:
+      - ./:/app
+      - ./uploads:/app/uploads
+      - ./temp:/app/temp
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Celery Worker - AI Queue
+  celery_worker_ai:
+    build: .
+    container_name: nexus-celery-worker-ai
+    command: celery -A config.celery_config worker --loglevel=info -Q ai_queue --concurrency=2
+    volumes:
+      - ./:/app
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Celery Worker - Reports Queue
+  celery_worker_reports:
+    build: .
+    container_name: nexus-celery-worker-reports
+    command: celery -A config.celery_config worker --loglevel=info -Q reports_queue
+    volumes:
+      - ./:/app
+      - ./temp:/app/temp
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Celery Beat - Periodic Task Scheduler
+  celery_beat:
+    build: .
+    container_name: nexus-celery-beat
+    command: celery -A config.celery_config beat --loglevel=info
+    volumes:
+      - ./:/app
+      - ./logs:/app/logs
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Flower - Celery Monitoring Dashboard
+  flower:
+    build: .
+    container_name: nexus-flower
+    command: celery -A config.celery_config flower --port=5555
+    ports:
+      - "5555:5555"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - celery_worker
+    restart: unless-stopped
+
+  # Streamlit App
+  streamlit:
+    build: .
+    container_name: nexus-streamlit
+    command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/app
+      - ./uploads:/app/uploads
+      - ./temp:/app/temp
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+=======
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.0
+    container_name: nexus-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - nexus
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+=======
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus -d nexus_analytics"]
+=======
+  db:
+    image: postgres:15-alpine
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus_user -d nexus_db"]
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+
+<<<<<<< HEAD
+  # Redis Cache
+<<<<<<< HEAD
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+    networks:
+      - nexus-network
+
+  # ============================================================================
+  # Redis Cache & Message Broker
+  # ============================================================================
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    command: redis-server --appendonly yes
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+version: '3.8'
+
+services:
+  db:
+    image: postgres:14
+    container_name: nexus-db
+    environment:
+      POSTGRES_DB: nexus
+      POSTGRES_USER: nexus_user
+      POSTGRES_PASSWORD: nexus_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus_user -d nexus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:6-alpine
+    container_name: nexus-redis
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
+=======
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+<<<<<<< HEAD
+<<<<<<< HEAD
+    networks:
+      - nexus
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  es_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  nexus:
+    driver: bridge
+>>>>>>> origin/claude/elasticsearch-search-implementation-013e5Tg92YLzoP4Dme7tcjZR
+=======
+=======
+    restart: unless-stopped
+    networks:
+      - nexus-network
+>>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+=======
+=======
+=======
+>>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+<<<<<<< HEAD
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+>>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+=======
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: nexus_redis
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+=======
+  # Redis for Celery
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+  redis:
+    image: redis:7-alpine
+    container_name: nexus-redis
+    ports:
+      - "6379:6379"
+<<<<<<< HEAD
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+=======
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+    networks:
+      - nexus-network
+
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+  # FastAPI Application
+  api:
+    build:
+      context: .
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+      dockerfile: Dockerfile
+    container_name: nexus-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://nexus:password@postgres:5432/nexus_db
+      REDIS_URL: redis://redis:6379/0
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+      ENVIRONMENT: production
+      LOG_LEVEL: INFO
+=======
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - nexus-network
+
+  # Celery Worker for ETL
+  celery-etl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-celery-etl
+    command: celery -A modules.etl.core.celery_app worker --loglevel=info -Q etl_queue
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+      dockerfile: Dockerfile.api
+    container_name: nexus-scheduler-api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://nexus:nexus@postgres:5432/nexus_scheduler
+      DATABASE_URL_SYNC: postgresql://nexus:nexus@postgres:5432/nexus_scheduler
+      REDIS_URL: redis://redis:6379/0
+      REDIS_HOST: redis
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-api
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+      dockerfile: Dockerfile
+    command: uvicorn modules.orchestration.api.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/nexus_orchestration
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      TEMPORAL_HOST: temporal:7233
+    volumes:
+      - .:/app
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+      target: production
+    container_name: nexus-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    volumes:
+<<<<<<< HEAD
+<<<<<<< HEAD
+      - ./logs:/app/logs
+    command: python -m modules.ab_testing.api.main
+
+  # Streamlit UI
+  ui:
+=======
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus_dev_password@postgres:5432/nexus_platform
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+      - DEBUG=True
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+  streamlit:
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-ui
+<<<<<<< HEAD
+    ports:
+      - "8501:8501"
+    environment:
+      DATABASE_URL: postgresql://nexus:password@postgres:5432/nexus_db
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - api
+    command: streamlit run modules/ab_testing/ui/app.py --server.port=8501 --server.address=0.0.0.0
+
+  # Database Migrations
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-migrations
+    environment:
+      DATABASE_URL: postgresql://nexus:password@postgres:5432/nexus_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: alembic upgrade head
+    restart: on-failure
+=======
+      - ./modules:/app/modules
+      - ./shared:/app/shared
+    networks:
+      - nexus-network
+
+  # Celery Worker for Integration Hub
+  celery-integration:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-celery-integration
+    command: celery -A modules.integration_hub.core.celery_app worker --loglevel=info -Q integration_queue
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+=======
+    command: streamlit run src/ui/streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8000
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-celery-worker
+    command: celery -A src.services.task_queue.celery_app worker --loglevel=info --concurrency=4
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+=======
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
+=======
+>>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+  # FastAPI Backend
+  api:
+    build: .
+    container_name: nexus-api
+    command: uvicorn api_server:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - .:/app
+=======
+    networks:
+      - nexus-network
+
+  # InfluxDB Time Series Database
+  influxdb:
+    image: influxdb:2.7-alpine
+    container_name: nexus-influxdb
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: nexus
+      DOCKER_INFLUXDB_INIT_PASSWORD: nexus_password
+      DOCKER_INFLUXDB_INIT_ORG: nexus
+      DOCKER_INFLUXDB_INIT_BUCKET: analytics
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: nexus_admin_token
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+=======
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+    networks:
+      - nexus-network
+
+  # FastAPI Backend
+<<<<<<< HEAD
+<<<<<<< HEAD
+  api:
+    build:
+      context: .
+      target: development
+    container_name: nexus-api
+    command: python app.py api --host 0.0.0.0 --port 8000 --workers 4
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus_analytics
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      INFLUXDB_URL: http://influxdb:8086
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+      - ./exports:/app/exports
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+
+  # FastAPI Application
+  api:
+    build: .
+    container_name: nexus-api
+    command: uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    volumes:
+      - .:/app
+    restart: unless-stopped
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+
+  # Streamlit UI
+  streamlit:
+    build: .
+    container_name: nexus-streamlit
+<<<<<<< HEAD
+    command: streamlit run main.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+
+  # ============================================================================
+  # MinIO Object Storage
+  # ============================================================================
+  minio:
+    image: minio/minio:latest
+    container_name: nexus-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - nexus-network
+
+  # ============================================================================
+  # NEXUS Web Application
+  # ============================================================================
+  app:
+    build:
+      context: .
+      target: production
+    container_name: nexus-app
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      - STORAGE_PROVIDER=minio
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_BUCKET=nexus-documents
+      - MINIO_SECURE=false
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    ports:
+      - "8501:8501"
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    volumes:
+      - ./modules:/app/modules
+      - ./shared:/app/shared
+    networks:
+      - nexus-network
+
+  # Celery Beat Scheduler
+  celery-beat:
+=======
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus_dev_password@postgres:5432/nexus_platform
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+  celery_beat:
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-celery-beat
+<<<<<<< HEAD
+    command: celery -A modules.etl.core.celery_app beat --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+=======
+    command: celery -A src.services.task_queue.celery_app beat --loglevel=info
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # ============================================================================
+  # FastAPI Backend
+  # ============================================================================
+  api:
+    build:
+      context: .
+      target: production
+    container_name: nexus-api
+    command: uvicorn nexus.api.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    ports:
+      - "8000:8000"
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+<<<<<<< HEAD
+<<<<<<< HEAD
+    volumes:
+      - ./modules:/app/modules
+      - ./shared:/app/shared
+    networks:
+      - nexus-network
+
+  # Flower - Celery Monitoring
+=======
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus_dev_password@postgres:5432/nexus_platform
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-flower
+<<<<<<< HEAD
+    command: celery -A modules.etl.core.celery_app flower --port=5555
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+=======
+    command: celery -A src.services.task_queue.celery_app flower --port=5555
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+<<<<<<< HEAD
+    networks:
+      - nexus-network
+
+  # ETL API Service
+  etl-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-etl-api
+    command: uvicorn modules.etl.api.main:app --host 0.0.0.0 --port 8001 --reload
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./modules:/app/modules
+      - ./shared:/app/shared
+      - ./data:/app/data
+    networks:
+      - nexus-network
+
+  # Integration Hub API Service
+  integration-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-integration-api
+    command: uvicorn modules.integration_hub.api.main:app --host 0.0.0.0 --port 8002 --reload
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    ports:
+      - "8002:8002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./modules:/app/modules
+      - ./shared:/app/shared
+    networks:
+      - nexus-network
+
+  # ETL Streamlit UI
+  etl-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-etl-ui
+    command: streamlit run modules/etl/ui/app.py --server.port=8501 --server.address=0.0.0.0
+    environment:
+      - ETL_API_URL=http://etl-api:8001
+    ports:
+      - "8501:8501"
+    depends_on:
+      - etl-api
+    volumes:
+      - ./modules:/app/modules
+    networks:
+      - nexus-network
+
+  # Integration Hub Streamlit UI
+  integration-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-integration-ui
+    command: streamlit run modules/integration_hub/ui/app.py --server.port=8502 --server.address=0.0.0.0
+    environment:
+      - INTEGRATION_API_URL=http://integration-api:8002
+    ports:
+      - "8502:8502"
+    depends_on:
+      - integration-api
+    volumes:
+      - ./modules:/app/modules
+    networks:
+      - nexus-network
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+      - celery_worker
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+
+volumes:
+  postgres_data:
+  redis_data:
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+
+  # ============================================================================
+  # Nginx Reverse Proxy (Optional)
+  # ============================================================================
+  nginx:
+    image: nginx:alpine
+    container_name: nexus-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+    networks:
+      - nexus-network
+    profiles:
+      - production
+
+  # ============================================================================
+  # Prometheus Monitoring (Optional)
+  # ============================================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: nexus-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    restart: unless-stopped
+    networks:
+      - nexus-network
+    profiles:
+      - monitoring
+
+  # ============================================================================
+  # Grafana Dashboards (Optional)
+  # ============================================================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: nexus-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - nexus-network
+    profiles:
+      - monitoring
+
+  # ============================================================================
+  # pgAdmin (Optional - Database Management)
+  # ============================================================================
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: nexus-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-admin@nexus.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - nexus-network
+    profiles:
+      - development
+=======
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # ============================================================================
+  # Celery Worker
+  # ============================================================================
+  celery-worker:
+    build:
+      context: .
+      target: production
+    container_name: nexus-celery-worker
+    command: celery -A nexus.core.celery_app worker --loglevel=info --concurrency=4
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    env_file:
+      - .env
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # ============================================================================
+  # Celery Beat Scheduler
+  # ============================================================================
+  celery-beat:
+    build:
+      context: .
+      target: production
+    container_name: nexus-celery-beat
+    command: celery -A nexus.core.celery_app beat --loglevel=info
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # ============================================================================
+  # Flower - Celery Monitoring
+  # ============================================================================
+  flower:
+    build:
+      context: .
+      target: production
+    container_name: nexus-flower
+    command: celery -A nexus.core.celery_app flower --port=5555
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    ports:
+      - "5555:5555"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    restart: unless-stopped
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+
+# ============================================================================
+# Volumes
+# ============================================================================
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+<<<<<<< HEAD
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  pgadmin_data:
+=======
+  minio_data:
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+    driver: local
+
+# ============================================================================
+# Networks
+# ============================================================================
+networks:
+  nexus-network:
+    driver: bridge
+<<<<<<< HEAD
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+# ============================================================================
+# Usage Examples:
+# ============================================================================
+# Start all services:
+#   docker-compose up -d
+#
+# Start with development tools:
+#   docker-compose --profile development up -d
+#
+# Start with monitoring:
+#   docker-compose --profile monitoring up -d
+#
+# Start with all profiles:
+#   docker-compose --profile development --profile monitoring up -d
+#
+# View logs:
+#   docker-compose logs -f app
+#
+# Stop all services:
+#   docker-compose down
+#
+# Stop and remove volumes:
+#   docker-compose down -v
+#
+# Rebuild and restart:
+#   docker-compose up -d --build
+#
+# Scale the app:
+#   docker-compose up -d --scale app=3
+# ============================================================================
+>>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+
+networks:
+  nexus-network:
+    driver: bridge
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+      - ./modules:/app/modules
+    command: uvicorn modules.scheduler.main:app --host 0.0.0.0 --port 8000 --reload
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+
+  # Celery Worker
+  celery_worker:
+    build:
+      context: .
+<<<<<<< HEAD
+      dockerfile: Dockerfile.api
+    container_name: nexus-celery-worker
+    environment:
+      DATABASE_URL: postgresql+asyncpg://nexus:nexus@postgres:5432/nexus_scheduler
+      DATABASE_URL_SYNC: postgresql://nexus:nexus@postgres:5432/nexus_scheduler
+      REDIS_URL: redis://redis:6379/0
+      REDIS_HOST: redis
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./modules:/app/modules
+    command: celery -A modules.scheduler.tasks.celery_app worker --loglevel=info
+=======
+      dockerfile: Dockerfile
+    command: celery -A modules.orchestration.workers.celery_app worker --loglevel=info --concurrency=4
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/nexus_orchestration
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      TEMPORAL_HOST: temporal:7233
+=======
+=======
+    command: streamlit run modules/content_calendar/streamlit_ui.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+      - api
+    volumes:
+      - .:/app
+    restart: unless-stopped
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+
+  # Celery Worker
+  celery-worker:
+    build: .
+    container_name: nexus-celery-worker
+<<<<<<< HEAD
+    command: celery -A modules.pipeline.tasks worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+    volumes:
+      - .:/app
+=======
+    volumes:
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Celery Worker
+  celery-worker:
+    build:
+      context: .
+      target: celery-worker
+    container_name: nexus-celery-worker
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+
+  # Celery Beat (Scheduler)
+  celery_beat:
+    build:
+      context: .
+<<<<<<< HEAD
+      dockerfile: Dockerfile.api
+    container_name: nexus-celery-beat
+    environment:
+      DATABASE_URL: postgresql+asyncpg://nexus:nexus@postgres:5432/nexus_scheduler
+      DATABASE_URL_SYNC: postgresql://nexus:nexus@postgres:5432/nexus_scheduler
+      REDIS_URL: redis://redis:6379/0
+      REDIS_HOST: redis
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+=======
+    command: celery -A celery_app worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+<<<<<<< HEAD
+      - ./modules:/app/modules
+    command: celery -A modules.scheduler.tasks.celery_app beat --loglevel=info
+=======
+    volumes:
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+    networks:
+      - nexus-network
+=======
+      - .:/app
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+    restart: unless-stopped
+
+  # Celery Beat (Scheduler)
+  celery-beat:
+<<<<<<< HEAD
+    build:
+      context: .
+      target: celery-beat
+    container_name: nexus-celery-beat
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+=======
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Streamlit Dashboard
+  dashboard:
+    build:
+      context: .
+      target: development
+    container_name: nexus-dashboard
+    command: python app.py streamlit --host 0.0.0.0 --port 8501
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus_analytics
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+      - api
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Celery Worker
+  celery-worker:
+    build:
+      context: .
+      target: development
+    container_name: nexus-celery-worker
+    command: python app.py celery-worker --loglevel=info
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus_analytics
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Celery Beat Scheduler
+  celery-beat:
+    build:
+      context: .
+      target: development
+    container_name: nexus-celery-beat
+    command: python app.py celery-beat --loglevel=info
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus_analytics
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+    networks:
+      - nexus-network
+=======
+    build: .
+    container_name: nexus-celery-beat
+    command: celery -A celery_app beat --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_password@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/app
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+    restart: unless-stopped
+
+  # Flower (Celery Monitoring)
+  flower:
+<<<<<<< HEAD
+    build:
+      context: .
+<<<<<<< HEAD
+      target: base
+    container_name: nexus-flower
+    command: celery -A tasks.celery_app flower --port=5555
+    ports:
+      - "5555:5555"
+=======
+      target: development
+    container_name: nexus-flower
+    command: python app.py flower
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+    env_file:
+      - .env
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+<<<<<<< HEAD
+=======
+    ports:
+      - "5555:5555"
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+    depends_on:
+      - redis
+      - celery-worker
+    networks:
+      - nexus-network
+    restart: unless-stopped
+<<<<<<< HEAD
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+
+  # Streamlit UI
+  streamlit:
+    build:
+      context: .
+<<<<<<< HEAD
+      dockerfile: Dockerfile.streamlit
+    container_name: nexus-streamlit-ui
+=======
+      dockerfile: Dockerfile
+    command: celery -A modules.orchestration.workers.celery_app beat --loglevel=info
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/nexus_orchestration
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    volumes:
+      - .:/app
+    depends_on:
+=======
+
+  # Celery Beat (Scheduler)
+  celery-beat:
+    build: .
+    container_name: nexus-celery-beat
+    command: celery -A modules.pipeline.tasks beat --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+      redis:
+        condition: service_healthy
+
+  # Flower (Celery Monitoring)
+  flower:
+<<<<<<< HEAD
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A modules.orchestration.workers.celery_app flower --port=5555
+    ports:
+      - "5555:5555"
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # Streamlit UI
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: streamlit run modules/orchestration/ui/app.py --server.port=8501 --server.address=0.0.0.0
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+    ports:
+      - "8501:8501"
+    environment:
+      API_BASE_URL: http://api:8000/api/v1
+<<<<<<< HEAD
+    depends_on:
+      - api
+    volumes:
+      - ./modules:/app/modules
+    command: streamlit run modules/scheduler/ui/app.py --server.port 8501 --server.address 0.0.0.0
+=======
+    volumes:
+      - .:/app
+    depends_on:
+      - api
+
+  # Temporal Server
+  temporal:
+    image: temporalio/auto-setup:latest
+    ports:
+      - "7233:7233"
+    environment:
+      - DB=postgresql
+      - DB_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PWD=postgres
+      - POSTGRES_SEEDS=postgres
+      - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development.yaml
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Temporal Web UI
+  temporal-ui:
+    image: temporalio/ui:latest
+    ports:
+      - "8088:8080"
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+      - TEMPORAL_CORS_ORIGINS=http://localhost:3000
+    depends_on:
+      - temporal
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+    build: .
+    container_name: nexus-flower
+    command: celery -A modules.pipeline.tasks flower --port=5555
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    depends_on:
+      - redis
+      - celery-worker
+
+  # Apache Airflow (Optional - uncomment to enable)
+  # airflow-webserver:
+  #   image: apache/airflow:2.7.0
+  #   container_name: nexus-airflow-webserver
+  #   command: webserver
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+  #     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://postgres:postgres@postgres:5432/airflow
+  #     - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/3
+  #     - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://postgres:postgres@postgres:5432/airflow
+  #   volumes:
+  #     - ./airflow/dags:/opt/airflow/dags
+  #     - ./airflow/logs:/opt/airflow/logs
+  #     - ./airflow/plugins:/opt/airflow/plugins
+  #   depends_on:
+  #     - postgres
+  #     - redis
+
+  # airflow-scheduler:
+  #   image: apache/airflow:2.7.0
+  #   container_name: nexus-airflow-scheduler
+  #   command: scheduler
+  #   environment:
+  #     - AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+  #     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://postgres:postgres@postgres:5432/airflow
+  #     - AIRFLOW__CELERY__BROKER_URL=redis://redis:6379/3
+  #     - AIRFLOW__CELERY__RESULT_BACKEND=db+postgresql://postgres:postgres@postgres:5432/airflow
+  #   volumes:
+  #     - ./airflow/dags:/opt/airflow/dags
+  #     - ./airflow/logs:/opt/airflow/logs
+  #     - ./airflow/plugins:/opt/airflow/plugins
+  #   depends_on:
+  #     - postgres
+  #     - redis
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+
+  celery:
+    build: .
+    command: celery -A celery_tasks worker --loglevel=info
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+
+  celery-beat:
+    build: .
+    command: celery -A celery_tasks beat --loglevel=info
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus@postgres:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
+
+volumes:
+  postgres_data:
+  redis_data:
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+>>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+
+networks:
+  default:
+    name: nexus-network
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+      target: streamlit
+    container_name: nexus-streamlit
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    depends_on:
+      - api
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - nexus-network
+=======
+    build: .
+    container_name: nexus-flower
+    command: celery -A celery_app flower --port=5555
+=======
+  # Celery Worker for Image Recognition
+  celery-image-recognition:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.image-recognition
+    container_name: nexus-celery-image
+    command: celery -A modules.image_recognition.services.celery_tasks worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_pass@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./uploads:/app/uploads
+
+  # Image Recognition API
+  image-recognition-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.image-recognition
+    container_name: nexus-image-recognition
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_pass@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./uploads:/app/uploads
+      - ./models:/app/models
+
+  # Testing & QA API
+  testing-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.testing
+    container_name: nexus-testing
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=postgresql://nexus_user:nexus_pass@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/1
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./test_results:/app/test_results
+      - ./test_reports:/app/test_reports
+      - ./screenshots:/app/screenshots
+
+  # Image Recognition Streamlit UI
+  image-recognition-ui:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.image-recognition
+    container_name: nexus-image-recognition-ui
+    command: streamlit run modules/image_recognition/ui/streamlit_app.py --server.port=8501
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE_URL=http://image-recognition-api:8001
+    depends_on:
+      - image-recognition-api
+
+  # Testing Streamlit UI
+  testing-ui:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.testing
+    container_name: nexus-testing-ui
+    command: streamlit run modules/testing/ui/streamlit_app.py --server.port=8502
+    ports:
+      - "8502:8502"
+    environment:
+      - API_BASE_URL=http://testing-api:8002
+    depends_on:
+      - testing-api
+
+  # Flower (Celery Monitoring)
+  flower:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.image-recognition
+    container_name: nexus-flower
+    command: celery -A modules.image_recognition.services.celery_tasks flower --port=5555
+>>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+    ports:
+      - "5555:5555"
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+<<<<<<< HEAD
+      - celery-worker
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+<<<<<<< HEAD
+    driver: local
+  redis_data:
+    driver: local
+=======
+  influxdb_data:
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+=======
+    networks:
+      - nexus-network
+
+  # Backend API
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: nexus-backend
+<<<<<<< HEAD
+<<<<<<< HEAD
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ENVIRONMENT=production
+=======
+  api:
+    build: .
+    container_name: nexus-api
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+<<<<<<< HEAD
+    volumes:
+      - ./backend:/app
+    command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - nexus-network
+
+  # Streamlit Frontend
+=======
+    volumes:
+      - ./backend:/app
+      - ./uploads:/app/uploads
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      DEBUG: "True"
+      SECRET_KEY: "development-secret-key-change-in-production"
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+=======
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus_user:nexus_pass@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - APP_ENV=development
+      - DEBUG=True
+      - UPLOAD_DIR=/app/uploads
+      - TESSERACT_CMD=/usr/bin/tesseract
+    volumes:
+      - ./backend/app:/app/app
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+=======
+
+  # Image Recognition API
+  image_recognition_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_image_api
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    ports:
+      - "8000:8000"
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+<<<<<<< HEAD
+    networks:
+      - nexus-network
+<<<<<<< HEAD
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Celery Worker
+  celery_worker:
+=======
+    restart: unless-stopped
+
+  # Celery Worker
+  celery-worker:
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.celery
+    container_name: nexus-celery-worker
+<<<<<<< HEAD
+    volumes:
+      - ./backend:/app
+      - ./uploads:/app/uploads
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      SECRET_KEY: "development-secret-key-change-in-production"
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    command: celery -A app.core.celery_app worker --loglevel=info
+
+  # Celery Beat (Scheduler)
+  celery_beat:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.celery
+    container_name: nexus-celery-beat
+    volumes:
+      - ./backend:/app
+    environment:
+      DATABASE_URL: postgresql://nexus:nexus_password@postgres:5432/nexus
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      SECRET_KEY: "development-secret-key-change-in-production"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-network
+    command: celery -A app.core.celery_app beat --loglevel=info
+
+  # Frontend (Streamlit)
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus_user:nexus_pass@postgres:5432/nexus_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    volumes:
+      - ./backend/app:/app/app
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      - postgres
+      - redis
+      - backend
+    networks:
+      - nexus-network
+    restart: unless-stopped
+
+  # Streamlit Frontend
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+    container_name: nexus-frontend
+<<<<<<< HEAD
+<<<<<<< HEAD
+    environment:
+      - BACKEND_URL=http://backend:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+    command: streamlit run /app/pages/Attribution.py --server.port 8501 --server.address 0.0.0.0
+    networks:
+      - nexus-network
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "8501:8501"
+    environment:
+      API_BASE_URL: http://backend:8000
+=======
+    ports:
+      - "8501:8501"
+    environment:
+      - BACKEND_API_URL=http://backend:8000
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+    depends_on:
+      - backend
+    networks:
+      - nexus-network
+<<<<<<< HEAD
+    command: streamlit run app.py --server.port=8501 --server.address=0.0.0.0
+
+volumes:
+  postgres_data:
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+
+networks:
+  nexus-network:
+    driver: bridge
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+=======
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+=======
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus_user:nexus_password@db:5432/nexus
+      - DATABASE_SYNC_URL=postgresql://nexus_user:nexus_password@db:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+
+  celery_worker:
+    build: .
+    container_name: nexus-celery-worker
+    command: celery -A celery_app worker --loglevel=info
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus_user:nexus_password@db:5432/nexus
+      - DATABASE_SYNC_URL=postgresql://nexus_user:nexus_password@db:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+
+  celery_beat:
+    build: .
+    container_name: nexus-celery-beat
+    command: celery -A celery_app beat --loglevel=info
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://nexus_user:nexus_password@db:5432/nexus
+      - DATABASE_SYNC_URL=postgresql://nexus_user:nexus_password@db:5432/nexus
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+
+  streamlit:
+    build: .
+    container_name: nexus-streamlit
+    command: streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    restart: unless-stopped
+
+  flower:
+    build: .
+    container_name: nexus-flower
+    command: celery -A celery_app flower --port=5555
+=======
+    volumes:
+      - ./modules/image_recognition:/app/modules/image_recognition
+      - uploads:/tmp/nexus_uploads
+    command: uvicorn modules.image_recognition.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Testing API
+  testing_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.testing
+    container_name: nexus_testing_api
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./modules/testing:/app/modules/testing
+    command: uvicorn modules.testing.api.main:app --host 0.0.0.0 --port 8001 --reload
+
+  # Celery Worker for Image Recognition
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_celery_worker
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./modules/image_recognition:/app/modules/image_recognition
+    command: celery -A modules.image_recognition.tasks.celery_tasks worker --loglevel=info
+
+  # Celery Beat for Scheduled Tasks
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_celery_beat
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/nexus_platform
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./modules/image_recognition:/app/modules/image_recognition
+    command: celery -A modules.image_recognition.tasks.celery_tasks beat --loglevel=info
+
+  # Flower - Celery Monitoring
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile.image_recognition
+    container_name: nexus_flower
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+<<<<<<< HEAD
+      - celery_worker
+    env_file:
+      - .env
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    restart: unless-stopped
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
+=======
+>>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+=======
+    command: celery -A modules.image_recognition.tasks.celery_tasks flower --port=5555
+
+  # Image Recognition Streamlit UI
+  image_recognition_ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: nexus_image_ui
+    environment:
+      - IMAGE_API_URL=http://image_recognition_api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - image_recognition_api
+    volumes:
+      - ./modules/image_recognition/ui:/app/ui
+    command: streamlit run ui/streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+
+  # Testing Streamlit UI
+  testing_ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: nexus_testing_ui
+    environment:
+      - TESTING_API_URL=http://testing_api:8001
+    ports:
+      - "8502:8502"
+    depends_on:
+      - testing_api
+    volumes:
+      - ./modules/testing/ui:/app/ui
+    command: streamlit run ui/streamlit_app.py --server.port=8502 --server.address=0.0.0.0
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a
+
+volumes:
+  postgres_data:
+  redis_data:
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+  redis_data:
+>>>>>>> origin/claude/content-calendar-module-01FvYrYmkZAP6rXZEaW6DyDq
+=======
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
+=======
+>>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
+=======
+>>>>>>> origin/claude/nexus-translation-module-011pENKCpeToEVPri4dLYT7D
+=======
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS
+=======
+>>>>>>> origin/claude/image-recognition-testing-modules-015kXqhjEMyEF78aWorhJ5ak
+=======
+  uploads:
+>>>>>>> origin/claude/image-recognition-testing-modules-01EHvbuBeofcgPwBsgHTbh4a

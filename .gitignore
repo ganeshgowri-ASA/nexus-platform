@@ -1,5 +1,5 @@
-# Byte-compiled / optimized / DLL files
 __pycache__/
+<<<<<<< HEAD
 *.py[codz]
 *$py.class
 
@@ -57,6 +57,7 @@ cover/
 
 # Django stuff:
 *.log
+logs/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
@@ -135,11 +136,13 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+=======
+*.pyc
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL
 .env
-.envrc
-.venv
-env/
+.venv/
 venv/
+<<<<<<< HEAD
 ENV/
 env.bak/
 venv.bak/
@@ -205,3 +208,99 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+# NEXUS Platform specific
+<<<<<<< HEAD
+# Data directory with uploaded files
+data/
+data/uploads/
+data/*.db
+
+# Streamlit
+.streamlit/
+
+# Thumbnails and previews
+**/thumbnails/
+**/previews/
+**/versions/
+=======
+documents/
+temp/
+logs/
+.streamlit/secrets.toml
+*.docx
+*.pdf
+!assets/templates/*.docx
+!assets/templates/*.pdf
+>>>>>>> origin/claude/word-editor-module-01PPyUEeNUgZmU4swtfxgoCB
+=======
+# Nexus Platform specific
+nexus.db
+*.db
+uploads/
+.streamlit/
+*.pdf
+*.docx
+>>>>>>> origin/claude/notes-taking-module-013StF1A3r6dn5NufjWAXYTn
+=======
+# Analytics Data
+data/raw/
+data/processed/
+data/exports/
+data/backups/
+exports/
+reports/
+
+# Machine Learning Models
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
+
+# Large Data Files
+*.csv.gz
+*.parquet
+
+# OS
+.DS_Store
+Thumbs.db
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
+=======
+# NEXUS Platform Specific
+# Docker
+docker-compose.override.yml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Logs
+logs/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+>>>>>>> origin/claude/attribution-module-nexus-01UGe4WskLGLRDM6KJKske1z
+=======
+*.log
+logs/
+*.db
+*.sqlite
+.coverage
+htmlcov/
+.pytest_cache/
+.DS_Store
+uploads/
+>>>>>>> origin/claude/build-advertising-lead-generation-01Skr8pwxfdGAtz4wHoobrUL

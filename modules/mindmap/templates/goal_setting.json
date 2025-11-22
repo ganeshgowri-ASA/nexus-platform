@@ -1,0 +1,60 @@
+{
+  "name": "Goal Setting Template",
+  "description": "Template for setting and tracking goals",
+  "structure": {
+    "root": "Main Goal",
+    "children": [
+      {
+        "text": "Why This Goal?",
+        "children": [
+          {"text": "Personal Motivation"},
+          {"text": "Long-term Vision"},
+          {"text": "Impact & Benefits"}
+        ]
+      },
+      {
+        "text": "SMART Criteria",
+        "children": [
+          {"text": "Specific: What exactly?"},
+          {"text": "Measurable: How to track?"},
+          {"text": "Achievable: Is it realistic?"},
+          {"text": "Relevant: Does it align?"},
+          {"text": "Time-bound: When to complete?"}
+        ]
+      },
+      {
+        "text": "Action Steps",
+        "children": [
+          {"text": "Step 1"},
+          {"text": "Step 2"},
+          {"text": "Step 3"}
+        ]
+      },
+      {
+        "text": "Resources Needed",
+        "children": [
+          {"text": "Time"},
+          {"text": "Money"},
+          {"text": "Skills"},
+          {"text": "Support"}
+        ]
+      },
+      {
+        "text": "Potential Obstacles",
+        "children": [
+          {"text": "Challenge 1"},
+          {"text": "Challenge 2"},
+          {"text": "Solutions"}
+        ]
+      },
+      {
+        "text": "Progress Tracking",
+        "children": [
+          {"text": "Weekly Check-ins"},
+          {"text": "Monthly Reviews"},
+          {"text": "Milestones"}
+        ]
+      }
+    ]
+  }
+}

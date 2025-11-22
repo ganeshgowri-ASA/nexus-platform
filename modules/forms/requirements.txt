@@ -1,0 +1,27 @@
+# Core dependencies for NEXUS Forms & Surveys Module
+
+# Web UI
+streamlit>=1.28.0
+
+# Data handling
+pandas>=2.0.0
+
+# Visualization
+plotly>=5.17.0
+
+# Excel export
+openpyxl>=3.1.0
+
+# PDF generation
+reportlab>=4.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Optional: Google Sheets integration
+# google-auth>=2.23.0
+# google-api-python-client>=2.100.0
+
+# Type checking (development)
+# mypy>=1.5.0

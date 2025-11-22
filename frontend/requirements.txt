@@ -1,0 +1,57 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+# UI Framework
+streamlit==1.28.2
+
+# HTTP Client
+requests==2.31.0
+httpx==0.25.2
+
+# Data Processing
+pandas==2.1.3
+numpy==1.26.2
+
+# Visualization
+plotly==5.18.0
+altair==5.1.2
+matplotlib==3.8.2
+seaborn==0.13.0
+
+# Utilities
+python-dotenv==1.0.0
+python-dateutil==2.8.2
+
+# Testing
+pytest==7.4.3
+=======
+# NEXUS Platform Frontend Requirements
+# Production-ready Python packages for Streamlit UI
+
+# Streamlit Framework
+streamlit==1.30.0
+
+# HTTP Client
+requests==2.31.0
+
+# Data Processing & Analysis
+pandas==2.1.4
+numpy==1.26.3
+
+# Visualization
+plotly==5.18.0
+matplotlib==3.8.2
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2024.1
+>>>>>>> origin/claude/build-campaign-manager-01KFpVYVNSuz2bfrpAMAZpwp
+=======
+# Frontend Dependencies
+streamlit==1.29.0
+streamlit-option-menu==0.3.6
+pandas==2.1.4
+plotly==5.18.0
+requests==2.31.0
+Pillow==10.1.0
+python-dotenv==1.0.0
+>>>>>>> origin/claude/ocr-translation-modules-01Kv1eeHRaW9ea224g8V59NS

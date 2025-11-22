@@ -1,0 +1,91 @@
+# NEXUS Wiki System Dependencies
+# Production-ready wiki system with advanced features
+
+# Core Dependencies (Already in main requirements.txt)
+# sqlalchemy>=2.0.0
+# pydantic>=2.0.0
+# fastapi>=0.104.0
+# streamlit>=1.31.0
+
+# Wiki-Specific Dependencies
+markdown>=3.5.0                 # Markdown processing
+python-markdown-math>=0.8       # Math equations in markdown
+pygments>=2.17.0                # Syntax highlighting
+
+# Import/Export
+beautifulsoup4>=4.12.0          # HTML parsing for imports
+lxml>=5.0.0                     # XML parsing for Confluence
+pypandoc>=1.12                  # Document conversion (optional)
+weasyprint>=60.0                # PDF generation (optional)
+python-docx>=1.1.0              # DOCX export (optional)
+reportlab>=4.0.0                # Alternative PDF generation
+
+# File Processing
+pillow>=10.0.0                  # Image processing
+python-magic>=0.4.27            # File type detection
+filetype>=1.2.0                 # Alternative file type detection
+
+# Search and Analytics
+whoosh>=2.7.4                   # Full-text search (alternative to Elasticsearch)
+fuzzywuzzy>=0.18.0              # Fuzzy string matching
+python-Levenshtein>=0.23.0      # Fuzzy matching acceleration
+
+# Diff and Versioning
+diff-match-patch>=20230430      # Text diff algorithm
+gitpython>=3.1.40               # Git-like versioning (optional)
+
+# Real-time Collaboration
+python-socketio>=5.10.0         # WebSocket support
+redis>=5.0.0                    # WebSocket message broker (optional)
+
+# Integrations
+slack-sdk>=3.26.0               # Slack integration
+microsoft-teams-webhooks>=0.1.0 # Teams webhooks (or equivalent)
+PyGithub>=2.1.0                 # GitHub API
+jira>=3.5.0                     # JIRA integration
+
+# AI Features (Already in main requirements.txt)
+# anthropic>=0.7.0              # Claude API
+# openai>=1.0.0                 # GPT-4 API
+tiktoken>=0.5.0                 # Token counting
+
+# Utilities
+python-dateutil>=2.8.2          # Date parsing
+pytz>=2023.3                    # Timezone support
+pyyaml>=6.0.1                   # YAML parsing for frontmatter
+toml>=0.10.2                    # TOML parsing
+python-slugify>=8.0.1           # URL-safe slug generation
+bleach>=6.1.0                   # HTML sanitization
+html2text>=2020.1.16            # HTML to markdown conversion
+markdownify>=0.11.6             # Alternative HTML to markdown
+
+# Caching
+cachetools>=5.3.0               # In-memory caching
+diskcache>=5.6.0                # Disk-based caching (optional)
+
+# Rate Limiting
+slowapi>=0.1.9                  # Rate limiting for FastAPI
+
+# Monitoring and Logging (Already in main requirements.txt)
+# prometheus-client>=0.19.0     # Metrics
+# python-json-logger>=2.0.7     # JSON logging
+
+# Testing
+pytest>=7.4.0                   # Testing framework
+pytest-asyncio>=0.21.0          # Async testing
+pytest-cov>=4.1.0               # Coverage reporting
+pytest-mock>=3.12.0             # Mocking
+faker>=21.0.0                   # Test data generation
+factory-boy>=3.3.0              # Test fixtures
+
+# Development
+black>=23.12.0                  # Code formatting
+isort>=5.13.0                   # Import sorting
+flake8>=6.1.0                   # Linting
+mypy>=1.7.0                     # Type checking
+pre-commit>=3.6.0               # Git hooks
+
+# Documentation
+mkdocs>=1.5.0                   # Documentation generator
+mkdocs-material>=9.5.0          # Material theme
+mkdocstrings>=0.24.0            # API documentation
