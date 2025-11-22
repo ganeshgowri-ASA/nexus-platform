@@ -4,10 +4,11 @@ from sqlalchemy import (
     Column, String, Integer, Text, DateTime, Boolean,
     Float, ForeignKey, JSON
 )
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy.orm import relationship
 import uuid
 
-Base = declarative_base()
+# Import Base from connection to ensure single declarative base
+from database.connection import Base
 
 
 def generate_uuid():

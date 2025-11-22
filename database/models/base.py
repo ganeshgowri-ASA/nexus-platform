@@ -2,9 +2,9 @@
 
 from datetime import datetime
 from sqlalchemy import Column, DateTime
-from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+# Import Base directly from connection to avoid circular imports
+from database.connection import Base
 
 
 class TimestampMixin:
@@ -17,3 +17,6 @@ class TimestampMixin:
         onupdate=datetime.utcnow,
         nullable=False
     )
+
+
+__all__ = ["Base", "TimestampMixin"]

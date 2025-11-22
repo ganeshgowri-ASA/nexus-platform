@@ -1,13 +1,12 @@
-"""Database models for NEXUS Platform."""
+"""
+Database models package for NEXUS Platform.
 
-from .base import Base, TimestampMixin
-from .batch_job import BatchJob, BatchTask, TaskStatus, JobStatus
+Models are imported lazily to avoid circular dependencies.
+Import specific models directly from their modules when needed.
+"""
 
-__all__ = [
-    "Base",
-    "TimestampMixin",
-    "BatchJob",
-    "BatchTask",
-    "TaskStatus",
-    "JobStatus",
-]
+# Import directly from connection to avoid circular imports
+from database.connection import Base
+from .base import TimestampMixin
+
+__all__ = ["Base", "TimestampMixin"]
