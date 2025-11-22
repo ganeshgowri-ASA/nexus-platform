@@ -4,6 +4,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """NEXUS Platform modules."""
 =======
 """NEXUS Platform Modules."""
@@ -120,3 +121,12 @@ def load_modules() -> Dict[str, BaseModule]:
 =======
 """Modules for NEXUS platform."""
 >>>>>>> origin/claude/excel-spreadsheet-editor-01ERQuTgtV3Kb8CMNgURhB2E
+=======
+"""
+NEXUS Platform - Modules
+
+This package contains all integrated modules for the NEXUS platform.
+"""
+
+__version__ = "1.0.0"
+>>>>>>> origin/claude/nexus-analytics-module-01FAKqqMpzB1WpxsYvosEHzE
