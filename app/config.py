@@ -61,6 +61,7 @@ class SecurityConfig(BaseModel):
     session_timeout: int = Field(default=3600, description="Session timeout in seconds")
 
 
+<<<<<<< HEAD
 class WikiConfig(BaseModel):
     """Wiki system configuration settings"""
     enabled: bool = Field(default=True, description="Enable wiki module")
@@ -133,6 +134,8 @@ class WikiConfig(BaseModel):
     rate_limit_per_minute: int = Field(default=60, description="API requests per minute per user")
 
 
+=======
+>>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
 class Settings(BaseSettings):
     """
     Main application settings
@@ -155,7 +158,10 @@ class Settings(BaseSettings):
     ui: UIConfig = Field(default_factory=UIConfig)
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
     security: SecurityConfig = Field(default_factory=SecurityConfig)
+<<<<<<< HEAD
     wiki: WikiConfig = Field(default_factory=WikiConfig)
+=======
+>>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
 
     # Feature flags
     enable_analytics: bool = Field(default=True, description="Enable analytics module")
