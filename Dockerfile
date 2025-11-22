@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM python:3.11-slim
 
 <<<<<<< HEAD
@@ -24,11 +25,18 @@ FROM python:3.11-slim as builder
 
 # Set working directory
 WORKDIR /build
+=======
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
+<<<<<<< HEAD
     git \
     && rm -rf /var/lib/apt/lists/*
 
@@ -99,11 +107,44 @@ COPY . .
 <<<<<<< HEAD
 # Create necessary directories
 RUN mkdir -p uploads temp logs
+=======
+    software-properties-common \
+    git \
+    postgresql-client \
+    libpq-dev \
+    scrot \
+    xvfb \
+    x11vnc \
+    fluxbox \
+    wmctrl \
+    xdotool \
+    tesseract-ocr \
+    libopencv-dev \
+    python3-opencv \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install Playwright browsers
+RUN playwright install --with-deps chromium
+
+# Copy application code
+COPY . .
+
+# Create necessary directories
+RUN mkdir -p /app/logs /app/data/screenshots /app/data/recordings /app/data/uploads
+
+# Expose ports
+EXPOSE 8000 8501
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 
+<<<<<<< HEAD
 # Expose ports
 EXPOSE 8501 5555
 
@@ -242,3 +283,11 @@ EXPOSE 8001 8002 8501 8502 5555
 
 CMD ["uvicorn", "modules.etl.api.main:app", "--host", "0.0.0.0", "--port", "8001"]
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
+
+# Default command (can be overridden in docker-compose)
+CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE

@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -72,10 +73,16 @@ version: '3.8'
 
 services:
   # PostgreSQL Database
+=======
+version: '3.8'
+
+services:
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
   postgres:
     image: postgres:16-alpine
     container_name: nexus-postgres
     environment:
+<<<<<<< HEAD
       POSTGRES_USER: ${POSTGRES_USER:-nexus}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nexus_password}
       POSTGRES_DB: ${POSTGRES_DB:-nexus_db}
@@ -85,10 +92,16 @@ services:
       POSTGRES_PASSWORD: nexus
       POSTGRES_DB: nexus_scheduler
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+      POSTGRES_DB: nexus_platform
+      POSTGRES_USER: nexus
+      POSTGRES_PASSWORD: nexus_dev_password
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     healthcheck:
@@ -125,11 +138,14 @@ services:
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
 =======
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U nexus"]
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
 <<<<<<< HEAD
     networks:
       - nexus-network
@@ -140,6 +156,9 @@ services:
 
   # Redis
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
   redis:
     image: redis:7-alpine
     container_name: nexus-redis
@@ -147,6 +166,7 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -365,11 +385,14 @@ networks:
     networks:
       - nexus-network
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
@@ -431,11 +454,23 @@ networks:
       CELERY_BROKER_URL: redis://redis:6379/1
       CELERY_RESULT_BACKEND: redis://redis:6379/2
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-api
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+<<<<<<< HEAD
     volumes:
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -444,10 +479,25 @@ networks:
 
   # Streamlit UI
   ui:
+=======
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus_dev_password@postgres:5432/nexus_platform
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+      - DEBUG=True
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+  streamlit:
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
     build:
       context: .
       dockerfile: Dockerfile
     container_name: nexus-ui
+<<<<<<< HEAD
     ports:
       - "8501:8501"
     environment:
@@ -488,11 +538,34 @@ networks:
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+=======
+    command: streamlit run src/ui/streamlit_app.py --server.port=8501 --server.address=0.0.0.0
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8000
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-celery-worker
+    command: celery -A src.services.task_queue.celery_app worker --loglevel=info --concurrency=4
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+<<<<<<< HEAD
     volumes:
       - ./modules:/app/modules
       - ./shared:/app/shared
@@ -501,21 +574,39 @@ networks:
 
   # Celery Beat Scheduler
   celery-beat:
+=======
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus_dev_password@postgres:5432/nexus_platform
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+  celery_beat:
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
     build:
       context: .
       dockerfile: Dockerfile
     container_name: nexus-celery-beat
+<<<<<<< HEAD
     command: celery -A modules.etl.core.celery_app beat --loglevel=info
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+=======
+    command: celery -A src.services.task_queue.celery_app beat --loglevel=info
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+<<<<<<< HEAD
     volumes:
       - ./modules:/app/modules
       - ./shared:/app/shared
@@ -523,19 +614,36 @@ networks:
       - nexus-network
 
   # Flower - Celery Monitoring
+=======
+    environment:
+      - DATABASE_URL=postgresql://nexus:nexus_dev_password@postgres:5432/nexus_platform
+      - REDIS_URL=redis://redis:6379/0
+      - ENVIRONMENT=development
+    volumes:
+      - .:/app
+      - /app/.venv
+    env_file:
+      - .env
+
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
   flower:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: nexus-flower
+<<<<<<< HEAD
     command: celery -A modules.etl.core.celery_app flower --port=5555
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+=======
+    command: celery -A src.services.task_queue.celery_app flower --port=5555
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
     ports:
       - "5555:5555"
     depends_on:
       - redis
+<<<<<<< HEAD
     networks:
       - nexus-network
 
@@ -624,10 +732,20 @@ networks:
     networks:
       - nexus-network
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+      - celery_worker
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
 
 volumes:
   postgres_data:
   redis_data:
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 =======
@@ -843,3 +961,5 @@ volumes:
   postgres_data:
   redis_data:
 >>>>>>> origin/claude/build-scheduler-module-01SggaZRDvso4oULkWNKGR2U
+=======
+>>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
