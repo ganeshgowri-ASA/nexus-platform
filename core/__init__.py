@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Core module for NEXUS platform."""
 
 from .base_module import BaseModule
@@ -12,3 +13,6 @@ from .config import settings
 
 __all__ = ["settings"]
 >>>>>>> origin/claude/batch-processing-module-01PCraqtfpn2xgwyYUuEev97
+=======
+"""Core functionality for NEXUS platform."""
+>>>>>>> origin/claude/excel-spreadsheet-editor-01ERQuTgtV3Kb8CMNgURhB2E

@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Tests for NEXUS platform."""
 =======
 """Test suite for Nexus Search."""
@@ -20,3 +21,6 @@ Comprehensive test coverage for all modules
 
 __version__ = "1.0.0"
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+"""Test suite for NEXUS platform."""
+>>>>>>> origin/claude/excel-spreadsheet-editor-01ERQuTgtV3Kb8CMNgURhB2E

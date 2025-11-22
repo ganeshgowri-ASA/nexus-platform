@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """NEXUS Platform modules."""
 =======
 """NEXUS Platform Modules."""
@@ -116,3 +117,6 @@ def load_modules() -> Dict[str, BaseModule]:
 
     return modules
 >>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
+=======
+"""Modules for NEXUS platform."""
+>>>>>>> origin/claude/excel-spreadsheet-editor-01ERQuTgtV3Kb8CMNgURhB2E
