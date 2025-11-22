@@ -1,0 +1,109 @@
+# NEXUS Integration Hub Requirements
+
+# Core dependencies
+fastapi>=0.104.0
+pydantic>=2.5.0
+sqlalchemy>=2.0.23
+alembic>=1.12.1
+
+# HTTP clients
+httpx>=0.25.2
+requests>=2.31.0
+
+# Async and task queue
+celery>=5.3.4
+redis>=5.0.1
+
+# Authentication and security
+cryptography>=41.0.7
+pyjwt>=2.8.0
+python-jose[cryptography]>=3.3.0
+python-multipart>=0.0.6
+
+# Data processing
+pandas>=2.1.4
+numpy>=1.26.2
+
+# UI
+streamlit>=1.29.0
+plotly>=5.18.0
+
+# Testing
+pytest>=7.4.3
+pytest-asyncio>=0.21.1
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+httpx-mock>=0.1.1
+
+# Database drivers
+psycopg2-binary>=2.9.9  # PostgreSQL
+pymysql>=1.1.0  # MySQL
+aiomysql>=0.2.0  # Async MySQL
+
+# Caching
+python-redis-cache>=3.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+pyyaml>=6.0.1
+click>=8.1.7
+python-dateutil>=2.8.2
+
+# Logging and monitoring
+loguru>=0.7.2
+prometheus-client>=0.19.0
+
+# API documentation
+uvicorn[standard]>=0.24.0
+gunicorn>=21.2.0
+
+# Development
+black>=23.12.0
+flake8>=6.1.0
+mypy>=1.7.1
+pre-commit>=3.5.0
+
+# Integration-specific libraries
+# Salesforce
+simple-salesforce>=1.12.5
+
+# Google (Drive, Gmail)
+google-auth>=2.25.2
+google-auth-oauthlib>=1.2.0
+google-api-python-client>=2.111.0
+
+# Microsoft
+msal>=1.26.0
+
+# Stripe
+stripe>=7.8.0
+
+# Slack
+slack-sdk>=3.26.1
+
+# Twilio
+twilio>=8.11.1
+
+# SendGrid
+sendgrid>=6.11.0
+
+# Shopify
+ShopifyAPI>=12.4.0
+
+# HubSpot
+hubspot-api-client>=8.4.1
+
+# Atlassian (Jira)
+atlassian-python-api>=3.41.9
+
+# Zoom
+zoomus>=1.1.9
+
+# Mailchimp
+mailchimp3>=3.0.21
+
+# Dropbox
+dropbox>=11.36.2
+
+# PayPal
+paypalrestsdk>=1.13.1
