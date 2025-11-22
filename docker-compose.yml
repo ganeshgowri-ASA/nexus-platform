@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 version: '3.8'
 
 services:
@@ -58,10 +59,24 @@ services:
       POSTGRES_USER: nexus
       POSTGRES_PASSWORD: password
       POSTGRES_DB: nexus_db
+=======
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexus-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nexus}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nexus_password}
+      POSTGRES_DB: ${POSTGRES_DB:-nexus_db}
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+<<<<<<< HEAD
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U nexus"]
 =======
@@ -92,6 +107,18 @@ services:
   # Redis Cache Service
   # ============================================================================
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - nexus-network
+
+  # Redis Cache & Message Broker
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
   redis:
     image: redis:7-alpine
     container_name: nexus-redis
@@ -99,6 +126,7 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     command: redis-server --appendonly yes
@@ -337,12 +365,35 @@ networks:
       API_PORT: 8000
       ENVIRONMENT: production
       LOG_LEVEL: INFO
+=======
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - nexus-network
+
+  # Celery Worker for ETL
+  celery-etl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-celery-etl
+    command: celery -A modules.etl.core.celery_app worker --loglevel=info -Q etl_queue
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
     volumes:
+<<<<<<< HEAD
       - ./logs:/app/logs
     command: python -m modules.ab_testing.api.main
 
@@ -374,10 +425,165 @@ networks:
         condition: service_healthy
     command: alembic upgrade head
     restart: on-failure
+=======
+      - ./modules:/app/modules
+      - ./shared:/app/shared
+    networks:
+      - nexus-network
+
+  # Celery Worker for Integration Hub
+  celery-integration:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-celery-integration
+    command: celery -A modules.integration_hub.core.celery_app worker --loglevel=info -Q integration_queue
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./modules:/app/modules
+      - ./shared:/app/shared
+    networks:
+      - nexus-network
+
+  # Celery Beat Scheduler
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-celery-beat
+    command: celery -A modules.etl.core.celery_app beat --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./modules:/app/modules
+      - ./shared:/app/shared
+    networks:
+      - nexus-network
+
+  # Flower - Celery Monitoring
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-flower
+    command: celery -A modules.etl.core.celery_app flower --port=5555
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+    networks:
+      - nexus-network
+
+  # ETL API Service
+  etl-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-etl-api
+    command: uvicorn modules.etl.api.main:app --host 0.0.0.0 --port 8001 --reload
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./modules:/app/modules
+      - ./shared:/app/shared
+      - ./data:/app/data
+    networks:
+      - nexus-network
+
+  # Integration Hub API Service
+  integration-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-integration-api
+    command: uvicorn modules.integration_hub.api.main:app --host 0.0.0.0 --port 8002 --reload
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nexus}:${POSTGRES_PASSWORD:-nexus_password}@postgres:5432/${POSTGRES_DB:-nexus_db}
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    ports:
+      - "8002:8002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./modules:/app/modules
+      - ./shared:/app/shared
+    networks:
+      - nexus-network
+
+  # ETL Streamlit UI
+  etl-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-etl-ui
+    command: streamlit run modules/etl/ui/app.py --server.port=8501 --server.address=0.0.0.0
+    environment:
+      - ETL_API_URL=http://etl-api:8001
+    ports:
+      - "8501:8501"
+    depends_on:
+      - etl-api
+    volumes:
+      - ./modules:/app/modules
+    networks:
+      - nexus-network
+
+  # Integration Hub Streamlit UI
+  integration-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-integration-ui
+    command: streamlit run modules/integration_hub/ui/app.py --server.port=8502 --server.address=0.0.0.0
+    environment:
+      - INTEGRATION_API_URL=http://integration-api:8002
+    ports:
+      - "8502:8502"
+    depends_on:
+      - integration-api
+    volumes:
+      - ./modules:/app/modules
+    networks:
+      - nexus-network
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 
 volumes:
   postgres_data:
   redis_data:
+<<<<<<< HEAD
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 =======
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
@@ -522,3 +728,9 @@ networks:
 #   docker-compose up -d --scale app=3
 # ============================================================================
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+
+networks:
+  nexus-network:
+    driver: bridge
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts

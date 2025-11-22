@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """NEXUS Platform modules."""
 =======
 """NEXUS Platform Modules."""
@@ -72,3 +73,6 @@ __all__ = [
     'session45_blog'
 ]
 >>>>>>> origin/claude/nexus-batch-features-01Tj2bV7P7zrLp4WgtRXnoS8
+=======
+"""NEXUS Platform Modules."""
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts

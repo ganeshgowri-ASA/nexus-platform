@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 NEXUS ETL Module - Production-ready Extract-Transform-Load system.
 
@@ -391,3 +392,6 @@ def init():
 
 # Auto-initialize on import (optional)
 # init()
+=======
+"""ETL Module - Extract, Transform, Load functionality."""
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts

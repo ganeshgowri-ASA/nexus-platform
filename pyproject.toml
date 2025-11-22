@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 [build-system]
 requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
@@ -251,10 +252,13 @@ requires = ["setuptools>=68.0"]
 build-backend = "setuptools.build_meta"
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
 
+=======
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 [tool.black]
 line-length = 100
 target-version = ['py311']
 include = '\.pyi?$'
+<<<<<<< HEAD
 <<<<<<< HEAD
 exclude = '''
 /(
@@ -271,11 +275,14 @@ exclude = '''
 '''
 =======
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
 select = [
+<<<<<<< HEAD
 <<<<<<< HEAD
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
@@ -288,16 +295,24 @@ select = [
 ignore = [
     "E501",  # line too long (handled by black)
 =======
+=======
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
     "E",  # pycodestyle errors
     "W",  # pycodestyle warnings
     "F",  # pyflakes
     "I",  # isort
+<<<<<<< HEAD
     "C",  # flake8-comprehensions
     "B",  # flake8-bugbear
+=======
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
     "UP", # pyupgrade
 ]
 ignore = [
     "E501",  # line too long, handled by black
+<<<<<<< HEAD
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
     "B008",  # do not perform function calls in argument defaults
     "C901",  # too complex
@@ -307,12 +322,24 @@ ignore = [
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]
 >>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
+=======
+    "B008",  # do not perform function calls in argument defaults
+]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
+<<<<<<< HEAD
 <<<<<<< HEAD
 addopts = "-v --cov=src --cov-report=term-missing"
 =======
@@ -396,3 +423,26 @@ exclude_lines = [
 =======
 ]
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+addopts = "-v --cov=modules --cov-report=html --cov-report=term"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nexus-platform"
+version = "0.1.0"
+description = "NEXUS: Unified AI-powered productivity platform with ETL and Integration Hub modules"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "sqlalchemy>=2.0.25",
+    "celery>=5.3.6",
+    "redis>=5.0.1",
+    "pandas>=2.2.0",
+    "streamlit>=1.30.0",
+]
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts

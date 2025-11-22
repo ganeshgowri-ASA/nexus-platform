@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM python:3.11-slim
 
 <<<<<<< HEAD
@@ -56,10 +57,16 @@ ENV PYTHONUNBUFFERED=1 \
 <<<<<<< HEAD
     PIP_DISABLE_PIP_VERSION_CHECK=1
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+FROM python:3.11-slim
+
+WORKDIR /app
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     g++ \
@@ -71,16 +78,24 @@ COPY requirements.txt .
 # Install Python dependencies
 =======
     curl \
+=======
+    g++ \
+    postgresql-client \
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies
 COPY requirements.txt .
+<<<<<<< HEAD
 >>>>>>> origin/claude/elasticsearch-search-implementation-013e5Tg92YLzoP4Dme7tcjZR
+=======
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 # Create necessary directories
 RUN mkdir -p uploads temp logs
@@ -215,3 +230,15 @@ CMD ["app/main.py", \
 # docker-compose up -d
 # ============================================================================
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+# Create data directory
+RUN mkdir -p /app/data
+
+# Set Python path
+ENV PYTHONPATH=/app
+
+# Expose ports
+EXPOSE 8001 8002 8501 8502 5555
+
+CMD ["uvicorn", "modules.etl.api.main:app", "--host", "0.0.0.0", "--port", "8001"]
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts

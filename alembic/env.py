@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 Alembic migration environment for NEXUS Platform.
 
@@ -45,21 +46,44 @@ from backend.models.document import (  # noqa: F401
 )
 
 # This is the Alembic Config object
+=======
+from logging.config import fileConfig
+from sqlalchemy import engine_from_config, pool
+from alembic import context
+import os
+import sys
+
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
+from shared.database.base import Base
+from modules.etl.models import *
+from modules.integration_hub.models import *
+
+# this is the Alembic Config object
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 config = context.config
 
 # Interpret the config file for Python logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+<<<<<<< HEAD
 # Set the SQLAlchemy URL from environment
 settings = get_settings()
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+=======
+# Set sqlalchemy.url from environment variable
+database_url = os.getenv("DATABASE_URL", "postgresql://nexus:nexus_password@localhost:5432/nexus_db")
+config.set_main_option("sqlalchemy.url", database_url)
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 
 # Add your model's MetaData object here for 'autogenerate' support
 target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
+<<<<<<< HEAD
     """
     Run migrations in 'offline' mode.
 
@@ -71,15 +95,21 @@ def run_migrations_offline() -> None:
     Calls to context.execute() here emit the given string to the
     script output.
     """
+=======
+    """Run migrations in 'offline' mode."""
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
+<<<<<<< HEAD
         compare_type=True,
         compare_server_default=True,
         include_schemas=True,
+=======
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
     )
 
     with context.begin_transaction():
@@ -87,6 +117,7 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
+<<<<<<< HEAD
     """
     Run migrations in 'online' mode.
 
@@ -99,11 +130,17 @@ def run_migrations_online() -> None:
 
     connectable = engine_from_config(
         configuration,
+=======
+    """Run migrations in 'online' mode."""
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section, {}),
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
 
     with connectable.connect() as connection:
+<<<<<<< HEAD
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
@@ -115,12 +152,18 @@ def run_migrations_online() -> None:
             # Render item for autogenerate
             render_item=None,
         )
+=======
+        context.configure(connection=connection, target_metadata=target_metadata)
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 
         with context.begin_transaction():
             context.run_migrations()
 
 
+<<<<<<< HEAD
 # Run migrations based on context
+=======
+>>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 if context.is_offline_mode():
     run_migrations_offline()
 else:
