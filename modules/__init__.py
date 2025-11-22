@@ -2,6 +2,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """NEXUS Platform modules."""
 =======
 """NEXUS Platform Modules."""
@@ -76,3 +77,42 @@ __all__ = [
 =======
 """NEXUS Platform Modules."""
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
+=======
+"""Modules registry for NEXUS platform."""
+
+from typing import Dict, Type
+from core.base_module import BaseModule
+
+
+def get_available_modules() -> Dict[str, Type[BaseModule]]:
+    """
+    Get all available modules.
+
+    Returns:
+        Dictionary mapping module names to module classes
+    """
+    from modules.pipeline.module import PipelineModule
+
+    return {
+        "pipeline": PipelineModule,
+    }
+
+
+def load_modules() -> Dict[str, BaseModule]:
+    """
+    Load and instantiate all modules.
+
+    Returns:
+        Dictionary of instantiated modules
+    """
+    modules = {}
+    available_modules = get_available_modules()
+
+    for name, module_class in available_modules.items():
+        try:
+            modules[name] = module_class()
+        except Exception as e:
+            print(f"Error loading module {name}: {e}")
+
+    return modules
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp

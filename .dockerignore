@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Python
 __pycache__/
 =======
@@ -19,10 +20,15 @@ __pycache__
 # Python
 __pycache__
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+# Python
+__pycache__/
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 *.py[cod]
 *$py.class
 *.so
 .Python
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 env/
@@ -36,6 +42,11 @@ build/
 =======
 =======
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+env/
+venv/
+ENV/
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 build/
 develop-eggs/
 dist/
@@ -51,6 +62,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+<<<<<<< HEAD
 MANIFEST
 
 <<<<<<< HEAD
@@ -64,16 +76,33 @@ venv.bak/
 
 # IDEs
 >>>>>>> origin/claude/build-dms-module-01NEqPB75CF7J7XEDr4aawai
+=======
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# IDEs
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+# OS
+.DS_Store
+Thumbs.db
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 
 # Git
 .git/
 .gitignore
+<<<<<<< HEAD
 =======
 .DS_Store
 
@@ -123,12 +152,15 @@ temp/*
 !temp/.gitkeep
 logs/*
 !logs/.gitkeep
+=======
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 
 # Docker
 Dockerfile
 docker-compose.yml
 .dockerignore
 
+<<<<<<< HEAD
 # Documentation
 *.md
 !README.md
@@ -150,11 +182,17 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+=======
+# Environment
+.env
+.env.local
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 
 # Logs
 logs/
 *.log
 
+<<<<<<< HEAD
 # Documentation
 docs/_build/
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
@@ -194,3 +232,21 @@ tmp/
 .ruff_cache/
 .mypy_cache/
 >>>>>>> origin/claude/ab-testing-module-01D3o2ivEGbVpUmsgesHtDjA
+=======
+# Database
+*.db
+*.sqlite
+
+# Airflow
+airflow/logs/
+airflow/*.pid
+airflow/*.cfg
+
+# Test
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation
+docs/_build/
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp

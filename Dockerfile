@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM python:3.11-slim
 
 <<<<<<< HEAD
@@ -29,10 +30,13 @@ WORKDIR /build
 =======
 =======
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
 
@@ -43,18 +47,24 @@ RUN apt-get update && apt-get install -y \
 <<<<<<< HEAD
     git \
 =======
+=======
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
     postgresql-client \
+<<<<<<< HEAD
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements
 COPY requirements.txt .
 
 # Install Python dependencies
+<<<<<<< HEAD
 <<<<<<< HEAD
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir --user -r requirements.txt
@@ -112,11 +122,14 @@ COPY requirements.txt .
 >>>>>>> origin/claude/build-etl-integration-hub-01CuRDV55w16up98jJhFz8Ts
 =======
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -154,11 +167,19 @@ RUN mkdir -p /app/logs /app/data/screenshots /app/data/recordings /app/data/uplo
 # Expose ports
 EXPOSE 8000 8501
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+# Create necessary directories
+RUN mkdir -p logs airflow/dags
+
+# Expose ports
+EXPOSE 8000 8501
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONPATH=/app
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 # Expose ports
 EXPOSE 8501 5555
@@ -316,3 +337,7 @@ EXPOSE 8000 8501
 # Default command
 CMD ["uvicorn", "modules.orchestration.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 >>>>>>> origin/claude/build-orchestration-module-01Xe9ZAfD1FN1j7vgrCUBQ3a
+=======
+# Default command
+CMD ["streamlit", "run", "main.py", "--server.port", "8501", "--server.address", "0.0.0.0"]
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp

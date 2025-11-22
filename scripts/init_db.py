@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python
 """
 Database initialization script for NEXUS Platform.
@@ -300,20 +301,37 @@ if __name__ == "__main__":
 """
 Database initialization script
 """
+=======
+"""
+Database initialization script.
+"""
+
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 import sys
 import os
 
 # Add parent directory to path
+<<<<<<< HEAD
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.config.database import init_db, engine
 from src.database.models import Base
 from src.utils.logger import get_logger
 
+=======
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from config.database import init_db, drop_db, engine
+from config.settings import settings
+from core.utils import setup_logging, get_logger
+
+setup_logging()
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 logger = get_logger(__name__)
 
 
 def main():
+<<<<<<< HEAD
     """Initialize the database"""
     logger.info("Initializing database...")
 
@@ -331,8 +349,40 @@ def main():
     except Exception as e:
         logger.error(f"❌ Failed to initialize database: {str(e)}")
         raise
+=======
+    """Initialize database."""
+    logger.info("Initializing NEXUS database...")
+
+    # Confirm if production
+    if settings.ENVIRONMENT == "production":
+        response = input("You are about to initialize production database. Continue? (yes/no): ")
+        if response.lower() != "yes":
+            logger.info("Database initialization cancelled")
+            return
+
+    try:
+        # Create tables
+        init_db()
+        logger.info("Database initialized successfully!")
+
+        # Print created tables
+        from sqlalchemy import inspect
+        inspector = inspect(engine)
+        tables = inspector.get_table_names()
+
+        logger.info(f"Created {len(tables)} tables:")
+        for table in tables:
+            logger.info(f"  - {table}")
+
+    except Exception as e:
+        logger.error(f"Failed to initialize database: {e}")
+        sys.exit(1)
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
 
 
 if __name__ == "__main__":
     main()
+<<<<<<< HEAD
 >>>>>>> origin/claude/build-rpa-module-011gc98wDCMg5EmJGgT8DFqE
+=======
+>>>>>>> origin/claude/build-nexus-pipeline-module-01QTVSb9CH4TjcrrT8nhjeJp
