@@ -6,6 +6,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Tests for NEXUS platform."""
 =======
 """Test suite for Nexus Search."""
@@ -40,3 +41,6 @@ Tests for NEXUS Content Calendar module.
 =======
 """Tests for NEXUS platform."""
 >>>>>>> origin/claude/lead-gen-advertising-modules-013aKZjYzcLFmpKdzNMTj8Bi
+=======
+"""Nexus Platform Tests"""
+>>>>>>> origin/claude/ai-automation-platform-01KUSGzg11wJKZGW5xToQEW5
