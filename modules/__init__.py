@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 """NEXUS Platform modules."""
 =======
 """NEXUS Platform Modules."""
@@ -52,3 +53,22 @@ __all__ = [
     "backup_sync",
 ]
 >>>>>>> origin/claude/nexus-platform-setup-01GgK8vgMUpRwMXvUmBp8eNW
+=======
+"""
+NEXUS Platform Modules
+Sessions 36-45: Advanced Features
+"""
+
+__all__ = [
+    'session36_flowchart',
+    'session37_mindmap',
+    'session38_infographics',
+    'session39_whiteboard',
+    'session40_gantt',
+    'session41_database',
+    'session42_api_tester',
+    'session43_code_editor',
+    'session44_website_builder',
+    'session45_blog'
+]
+>>>>>>> origin/claude/nexus-batch-features-01Tj2bV7P7zrLp4WgtRXnoS8
